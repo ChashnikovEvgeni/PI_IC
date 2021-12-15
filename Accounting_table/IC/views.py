@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import render #шаблонизатор
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import SearchFilter, OrderingFilter
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from .models import *
@@ -27,18 +28,15 @@ class DepartmentViewSet(ModelViewSet):
 class IndicatorViewSet(ModelViewSet):
     queryset = Indicator.objects.all()
     serializer_class = IndicatorSerializer
+    permission_classes = [IsAuthenticated]
     #как пользоваться фильтрами, поиском, сортировкой
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-
-    #filter_fields = ['target_indicator']
-    #filter_fields = ['department']
-
-    # если ищем по более чем одному полю, тогда search
-    #search_fields = ['target_indicator','actual_indicator']
+    filter_fields = ['target_indicator']
+     # если ищем по более чем одному полю, тогда search
+    search_fields = ['target_indicator','actual_indicator']
     # адрес по следующему формату
-   # http://127.0.0.1:8000/IC/Indicator/?search=90.0
-
-    #сортировка
+     # http://127.0.0.1:8000/IC/Indicator/?search=90.0
+     #сортировка
     rdering_fields = ['department']
 
 
@@ -73,3 +71,7 @@ def all_Service(request):
     return HttpResponse({service})
 
 
+
+
+def auth(request):
+    return render(request, 'oauth.html')
