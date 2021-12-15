@@ -15,7 +15,20 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from rest_framework.routers import SimpleRouter
+
+from IC.views import index, IndicatorViewSet
+from django.urls import path, include
+
+#router = SimpleRouter()    #это djangorestframework  унести потом
+
+#router.register(r'Indicator', IndicatorViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('index/', index),
+    path('IC/', include('IC.urls')),
+#разнести потом всё по urls
 ]
+
+#urlpatterns += router.urls
