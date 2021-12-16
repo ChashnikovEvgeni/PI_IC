@@ -28,7 +28,7 @@ class DepartmentViewSet(ModelViewSet):
 class IndicatorViewSet(ModelViewSet):
     queryset = Indicator.objects.all()
     serializer_class = IndicatorSerializer
-    permission_classes = [IsAuthenticated]
+    #permission_classes = [IsAuthenticated]
     #как пользоваться фильтрами, поиском, сортировкой
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filter_fields = ['target_indicator']
