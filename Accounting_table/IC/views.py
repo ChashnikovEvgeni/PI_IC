@@ -6,6 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from .models import *
+from .permissions import IsOwnerOrStaffOrReadOnly
 from .serializers import *
 
 
@@ -28,7 +29,7 @@ class DepartmentViewSet(ModelViewSet):
 class IndicatorViewSet(ModelViewSet):
     queryset = Indicator.objects.all()
     serializer_class = IndicatorSerializer
-    #permission_classes = [IsAuthenticated]
+    permission_classes = [IsOwnerOrStaffOrReadOnly]
     #как пользоваться фильтрами, поиском, сортировкой
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
     filter_fields = ['target_indicator']
@@ -38,6 +39,10 @@ class IndicatorViewSet(ModelViewSet):
      # http://127.0.0.1:8000/IC/Indicator/?search=90.0
      #сортировка
     rdering_fields = ['department']
+
+    def perform_create(self, serializer):
+         serializer.validated_data['owner'] = self.request.user
+         serializer.save()
 
 
 
