@@ -1,4 +1,4 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, raise_errors_on_nested_writes
 
 from IC.models import *
 
@@ -19,5 +19,6 @@ class IndicatorSerializer(ModelSerializer):
     class Meta:
         model = Indicator
         fields = '__all__'
+    # Determine the fields to apply...
 
 
