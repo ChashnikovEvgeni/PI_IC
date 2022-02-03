@@ -1,4 +1,5 @@
 {% extends 'IC/base.html' %}
+{% load IC_tags %}
 
 {% block settlement_form %}
 </br>
@@ -14,4 +15,6 @@
 </table>
 </div>
 </div>
+{% show_critical_service %}
 {% endblock %}
+

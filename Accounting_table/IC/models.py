@@ -9,8 +9,8 @@ from django.urls import reverse
 
 class Service(models.Model):
     title = models.CharField(max_length=255, verbose_name="Название")
-    indicator_RTD = models.DecimalField(max_digits=5, decimal_places=2, default= 0)
-    indicator_VIR = models.DecimalField(max_digits=5, decimal_places=2, default=0)
+    indicator_RTD = models.DecimalField(max_digits=5, decimal_places=2, default= 0, verbose_name="ППРТД показатель")
+    indicator_VIR = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="ПФВИР показатель")
 
     def __str__(self):
         return f'Id {self.id}: {self.title}'
@@ -25,12 +25,12 @@ class Service(models.Model):
 
     class Meta:
         verbose_name = 'Служба(уточнить название раздела)'
-        verbose_name_plural = 'Служба(уточнить название раздела)'
+        verbose_name_plural = 'Службы(уточнить название раздела)'
         ordering = ['title']
 
 class Department(models.Model):
     title = models.TextField(verbose_name="Название")
-    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True)
+    service = models.ForeignKey(Service, on_delete=models.CASCADE, null=True, verbose_name="Служба")
     #List_of_indicators
     #Уточнить название перемнной, фактический или плановый
     department_indicator = models.DecimalField(max_digits=4, decimal_places=1, default=0, verbose_name="Показатель")
@@ -52,7 +52,7 @@ class Department(models.Model):
         Service.objects.get(id=self.service.id).save()
 
     class Meta:
-        verbose_name = 'Отделы/группы'
+        verbose_name = 'Отдел/группа'
         verbose_name_plural = 'Отделы/группы'
         ordering = ['service', 'title']
 
@@ -71,7 +71,7 @@ class Indicator(models.Model):
     # в excel значение показателя за отчётный период
     Degree_of_compliance = models.DecimalField(max_digits=4, decimal_places=1, default=0, verbose_name="Выполнение")
     #
-    department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True)
+    department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, verbose_name="отдел/группа")
 
     def __str__(self):
         return f'Id {self.id}: {self.title}'
@@ -88,7 +88,7 @@ class Indicator(models.Model):
         Department.objects.get(id=self.department.id).save()
 
     class Meta:
-        verbose_name = 'Показатели'
+        verbose_name = 'Показатель'
         verbose_name_plural = 'Показатели'
         ordering = ['department', 'title']
 
