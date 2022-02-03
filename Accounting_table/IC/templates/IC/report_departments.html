@@ -1,0 +1,17 @@
+{% extends 'IC/base.html' %}
+
+{% block report_departments %}
+</br>
+<div class="container">
+<div class="table-responsive">
+<table class="table table-bordered table-primary table-striped table-hover" style="border: 10px; margin-top:10%">
+    <thead><tr><th>#</th><th>Название отдела/группы</th><th>Показатель</th><th>Вес, приоритета передачи режимно-технологических данных</th><th>Показатель</th> <th>Вес, приоритет функционирование ВИР</th> <th>Показатель</th></tr></thead>
+    <tbody>
+    {% for department in list %}
+    <tr><td>{{forloop.counter}}</td><td>{{department.title}}</td><td>{{department.department_indicator}}</td><td>{{department.PPRTD_weight}}</td><td>{{department.PPRTD_indicator}}</td><td>{{department.PFVIR_weight}}</td><td>{{department.PFVIR_indicator}}</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
+{% endblock %}

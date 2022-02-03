@@ -1,0 +1,17 @@
+{% extends 'IC/base.html' %}
+
+{% block data_input %}
+</br>
+<div class="container">
+<div class="table-responsive">
+<table class="table table-bordered table-primary table-striped table-hover" style="border: 10px; margin-top:10%">
+    <thead><tr><th>#</th><th>Название отдела/группы</th><th>Название показателя</th><th>Целевой показаетль</th><th>Факт</th></tr></thead>
+    <tbody>
+	{% for Indicator in list %}
+    <tr><td>{{forloop.counter}}</td><td>{{Indicator.department.title}}</td><td>{{Indicator.title}}</td><td>{{Indicator.target_indicator}}</td><td>{{Indicator.actual_indicator}}</td></tr>
+    {% endfor %}
+	</tbody>
+</table>
+</div>
+</div>
+{% endblock %}

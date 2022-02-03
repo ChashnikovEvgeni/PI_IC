@@ -1,0 +1,37 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link type="text/css" href="{% static 'IC/css/bootstrap.min.css' %}" rel="stylesheet" />
+    <link rel="shortcut icon" href="{% static 'IC/images/favicon .ico' %}" type="image/x-icon">
+    <title>IC</title>
+</head>
+<body>
+
+
+<div class="header">
+<div class="container">
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+<div class="container-fluid" >
+    {% block main_menu %}
+    <a class="btn btn-secondary" href = "{% url 'home' %}" role="button">Главная страница</a> <a class="btn btn-secondary" href = "{% url 'indicator-data-input' %}" role="button">Ввод данных за отчётный период</a>  <a class="btn btn-secondary" href = "{% url 'department-report-departments' %}" role="button" >Отчёт отделов</a> <a class="btn btn-secondary" href = "{% url 'indicator-settlement-form' %}" role="button" >Расчётная форма</a>
+    {% endblock %}
+</div>
+</nav>
+</div>
+</div>
+{% block report_departments %}
+{% endblock %}
+
+
+{% block settlement_form %}
+{% endblock %}
+
+{% block data_input %}
+{% endblock %}
+
+<script src="https://cdn.jsdelivr.net//js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+</body>
+</html>
