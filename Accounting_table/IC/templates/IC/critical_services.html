@@ -1,14 +1,17 @@
+{% load IC_tags %}
+
 <div class="container">
 <div class="table-responsive">
 <table class="table table-bordered table-primary table-striped table-hover" style="border: 10px; margin-top:10%">
     <thead><tr><th>#</th><th>Критически важные сервисы/службы</th><th>Режим работы</th><th>Рабочих дней в отчётном периоде</th><th>План, ч</th> <th>Факт, ч</th> <th>Выполнение</th><th>Принадлежность</th></tr></thead>
     <tbody>
-    {% for cs in critical_services %}
+    {% for cs in page_obj %}
     <tr><td>{{forloop.counter}}</td><td>{{cs.title}}</td><td>{{cs.working_mode_hours}}/{{cs.working_mode_days}}</td><td>{{cs.working_days_period}}</td><td>{{cs.Operating_time_plan}}</td><td>{{cs.Operating_time_actual}}</td><td>{{cs.Completion_rate}}</td><td>{{cs.Service_ownership}}</td></tr>
     {% endfor %}
     </tbody>
 </table>
 </div>
+    {% show_pagination page_obj=page_obj %}
 </div>
 
 

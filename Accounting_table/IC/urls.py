@@ -14,9 +14,11 @@ urlpatterns = [
     path('', index, name='home'),
     path('allI/', all_Indicators, name='allI'),
     path('allD/', all_Departments, name='allD'),
-    path('allS/', all_Service, name='allS')
+    path('allS/', all_Service, name='allS'),
+    path('login/', login, name='login'),
+    path('register/', RegisterUer.as_view(), name='register'),
 ]
 
 urlpatterns += router.urls
 
-print(urlpatterns)
+#print(urlpatterns)

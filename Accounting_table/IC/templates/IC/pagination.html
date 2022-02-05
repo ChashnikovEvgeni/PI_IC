@@ -1,0 +1,29 @@
+
+{% block pagination %}
+{% if page_obj.has_other_pages  %}
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item">
+        <a class="page-link" href="?page={{ 1 }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+        </li>
+            {% for p in page_obj.paginator.page_range %}
+       {% if page_obj.number == p %}
+        <li class="page-item">
+            <a class="nav-link disabled" href="?page={{ p }}">{{ p }}</a>
+        </li>
+        {% else %}
+         <li class="page-item">
+            <a class="page-link " href="?page={{ p }}">{{ p }}</a>
+        </li>
+        {% endif %}
+
+        {% endfor %}
+        <li class="page-item">
+        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+        <span aria-hidden="true">&raquo;</span>
+      </a>
+        </li>
+    </ul>
+  </nav>
+{% endif %}
+{% endblock %}

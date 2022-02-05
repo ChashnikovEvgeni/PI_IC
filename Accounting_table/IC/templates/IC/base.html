@@ -18,7 +18,7 @@
 <nav class="navbar navbar-light" style="background-color: #e3f2fd;">
 <div class="container-fluid" >
     {% block main_menu %}
-    <a class="btn btn-secondary" href = "{% url 'home' %}" role="button">Главная страница</a> <a class="btn btn-secondary" href = "{% url 'indicator-data-input' %}" role="button">Ввод данных за отчётный период</a>  <a class="btn btn-secondary" href = "{% url 'department-report-departments' %}" role="button" >Отчёт отделов</a> <a class="btn btn-secondary" href = "{% url 'indicator-settlement-form' %}" role="button" >Расчётная форма</a>
+    <a class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top" href = "{% url 'home' %}" role="button">Главная страница</a> <a class="btn btn-secondary" href = "{% url 'indicator-data-input' %}" role="button">Ввод данных за отчётный период</a>  <a class="btn btn-secondary" href = "{% url 'department-report-departments' %}" role="button" >Отчёт отделов</a> <a class="btn btn-secondary" href = "{% url 'indicator-settlement-form' %}" role="button" >Расчётная форма</a><a class="btn btn-secondary" href = "{% url 'login' %}" role="button">Войти</a> <a class="btn btn-secondary" href = "{% url 'register' %}" role="button">Регистрация</a>
     {% endblock %}
 </div>
 </nav>

@@ -7,7 +7,8 @@ from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-
+from rest_framework.pagination import PageNumberPagination
+from django.core.paginator import Paginator
 from .models import *
 from .permissions import IsOwnerOrStaffOrReadOnly
 from .serializers import *
@@ -40,33 +41,39 @@ class DepartmentViewSet(ModelViewSet):
 
     @action(detail=False, methods=['get', 'post', 'put', 'delete'], name='report_departments')
     def report_departments(self, request, *args, **kwargs):
-        return render(request, 'IC/report_departments.html', {'list': self.queryset})
+        page_obj = get_page_obj(self.queryset, request, 5)
+        return render(request, 'IC/report_departments.html', {'page_obj': page_obj, 'list': self.queryset})
 
     # lookup_field = 'Indicator'
 
 
-# def get_object(self):
-#  obj = Department.objects.get(Indicator = self.kwargs('Indicator'))
-#   return obj
+
+
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 2
+    page_size_query_param = 'page_size'
+    max_page_size = 2
 
 
 class IndicatorViewSet(ModelViewSet):
     queryset = Indicator.objects.select_related('department')
-
     if len(queryset) == 0:
         raise Http404()
 
     serializer_class = IndicatorSerializer
+    pagination_class = StandardResultsSetPagination
 
     @action(detail=False, methods=['get', 'post', 'put', 'delete'], name='Settlement form')
     def settlement_form(self, request, *args, **kwargs):
         print(self.queryset)
-        return render(request, 'IC/settlement_form.html', {'list': self.queryset})
+        page_obj = get_page_obj(self.queryset, request, 2)
+        return render(request, 'IC/settlement_form.html', {'page_obj': page_obj, 'list': self.queryset})
 
     @action(detail=False, methods=['get', 'post', 'put', 'delete'], name='Data input')
     def data_input(self, request, *args, **kwargs):
         print(self.queryset)
-        return render(request, 'IC/data_input.html', {'list': self.queryset})
+        page_obj = get_page_obj(self.queryset, request, 2)
+        return render(request, 'IC/data_input.html', {'page_obj': page_obj, 'list': self.queryset})
 
 
 # lookup_field = 'department'
@@ -99,6 +106,12 @@ class Critical_serviceViewSet(ModelViewSet):
 #     serializer.validated_data['owner'] = self.request.user
 #    serializer.save()
 
+
+def get_page_obj(queryset, request, num_objects):
+    paginator = Paginator(queryset, num_objects)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return page_obj
 
 def all_Indicators(request):
     Indicators = Indicator.objects.all()
