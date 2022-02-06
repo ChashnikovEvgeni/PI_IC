@@ -34,9 +34,22 @@ urlpatterns = [
     path('auth/', auth),
     path('__debug__/', include('debug_toolbar.urls')),
 
-
 #разнести потом всё по urls
 ]
 
+if settings.DEBUG:
+    import debug_toolbar
+    import mimetypes
+
+    mimetypes.add_type("IC/javascript", ".js", True)
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ] + urlpatterns
+
+def show_toolbar(request):
+    return True
+DEBUG_TOOLBAR_CONFIG = {
+    "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
+}
 
 #urlpatterns += router.urls
