@@ -15,10 +15,12 @@ urlpatterns = [
     path('allI/', all_Indicators, name='allI'),
     path('allD/', all_Departments, name='allD'),
     path('allS/', all_Service, name='allS'),
-    path('login/', login, name='login'),
-    path('register/', RegisterUer.as_view(), name='register'),
+    path('login/', LoginUser.as_view(), name='login'),
+    path('logout/', logout_user, name='logout'),
+    path('register/', RegisterUser.as_view(), name='register'),
 ]
 
 urlpatterns += router.urls
 
-#print(urlpatterns)
+
+print(urlpatterns)

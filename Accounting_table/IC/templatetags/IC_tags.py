@@ -1,6 +1,12 @@
+import django.http
+import requests
+import rest_framework.request
 from django import template
+from django.http import HttpRequest
+
 from IC.models import *
 from IC.views import *
+import math
 register = template.Library()
 
 @register.simple_tag(name='some_function')
@@ -9,8 +15,9 @@ def your_function():
 
 @register.inclusion_tag('IC/critical_services.html')
 def show_critical_service(request):
+    print(request)
     critical_services = Critical_service.objects.all()
-    page_obj = get_page_obj(Critical_service.objects.all(), request, 1)
+    page_obj = get_page_obj(Critical_service.objects.all(), 1, request)
     return {"page_obj": page_obj, "critical_services": critical_services}
 
 @register.inclusion_tag('IC/pagination.html')
@@ -19,5 +26,10 @@ def show_pagination(page_obj):
 
 @register.simple_tag
 def get_number(page_obj, curr_num):
-    page_number = (page_obj.number - 1)*(len(page_obj.paginator.object_list)-1) + curr_num
+   # print(len(page_obj))
+   # print(page_obj.number)
+   # print(curr_num)
+    #print(len(page_obj.paginator.object_list))
+    #(page_obj.start_index - page_obj.end_index) /
+    page_number = (page_obj.number-1)*math.ceil(len(page_obj.paginator.object_list)/page_obj.paginator.num_pages) + curr_num
     return (page_number)

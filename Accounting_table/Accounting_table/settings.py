@@ -42,7 +42,7 @@ INSTALLED_APPS = [
 
 STATIC_URL = "static/"
 
-IpythonNTERNAL_IPS = [
+INTERNAL_IPS = [
     "127.0.0.1",
 
 ]
@@ -55,7 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
 ROOT_URLCONF = 'Accounting_table.urls'
@@ -135,6 +135,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # эксплуатация
 STATICFILES_DIRS = [] #нестандратные пути
+
+LOGIN_REDIRECT_URL = '/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
