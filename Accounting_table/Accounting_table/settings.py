@@ -44,6 +44,8 @@ STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # эксплуатация
 STATICFILES_DIRS = [] #нестандратные пути
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 
 MIDDLEWARE = [
@@ -55,8 +57,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar_force.middleware.ForceDebugToolbarMiddleware',
 ]
+
+# при получение json пакета вместо рендера страницы - url+ ?debug-toolbar
 
 ROOT_URLCONF = 'Accounting_table.urls'
 
@@ -85,8 +90,8 @@ WSGI_APPLICATION = 'Accounting_table.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ICP',
-        'USER': 'user1',
+        'NAME': 'ACICP',
+        'USER': 'postgres',
         'PASSWORD': '123',
         'HOST': 'localhost',
         'PORT': '',
@@ -139,13 +144,10 @@ INTERNAL_IPS = [
     "127.0.0.1",
 ]
 
-if DEBUG:
-    import mimetypes
-    mimetypes.add_type("IC/javascript", ".js", True)
 
-DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK" : lambda request: True,
-}
+
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -161,7 +163,4 @@ REST_FRAMEWORK = {
     )
 }
 
-SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
-SOCIAL_AUTH_GITHUB_KEY = '626493e791269bacffb0'
-SOCIAL_AUTH_GITHUB_SECRET = 'a75959009cf64eb6c0fe7feeba1c2d3136c88aec'

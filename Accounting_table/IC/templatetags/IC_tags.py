@@ -31,5 +31,5 @@ def get_number(page_obj, curr_num):
    # print(curr_num)
     #print(len(page_obj.paginator.object_list))
     #(page_obj.start_index - page_obj.end_index) /
-    page_number = (page_obj.number-1)*math.ceil(len(page_obj.paginator.object_list)/page_obj.paginator.num_pages) + curr_num
+    page_number = (page_obj.number-1)*math.ceil(page_obj.paginator.count/page_obj.paginator.num_pages) + curr_num
     return (page_number)

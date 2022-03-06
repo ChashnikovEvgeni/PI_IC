@@ -1,6 +1,7 @@
 import sys
 
 from django.contrib.auth.models import User
+from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
@@ -61,17 +62,14 @@ class Indicator(models.Model):
     title = models.CharField(max_length=255, verbose_name="Название")
     units = models.CharField(max_length=255, verbose_name="Единицы измерения")
     comment = models.TextField(verbose_name="Комментарий")
-    #задали заранее
     target_indicator = models.DecimalField(max_digits=4, decimal_places=1, default=0, verbose_name="Целевой показатель")
-    #фактическое значение
     actual_indicator = models.DecimalField(max_digits=4, decimal_places=1, default=0, verbose_name="Фактический показатель")
-    #вес показателя
     Significance_of_indicator = models.DecimalField(max_digits=5, decimal_places=4, verbose_name="Вес показателя")
     Plan = models.DecimalField(max_digits=4, decimal_places=1, default=0, verbose_name="План")
     # в excel значение показателя за отчётный период
     Degree_of_compliance = models.DecimalField(max_digits=4, decimal_places=1, default=0, verbose_name="Выполнение")
-    #
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, verbose_name="отдел/группа")
+    Confirmation_document = models.FileField(upload_to="documents/", null=True, verbose_name="Подтверждающий документ")
 
     def __str__(self):
         return f'Id {self.id}: {self.title}'
@@ -103,6 +101,7 @@ class Critical_service(models.Model):
     Operating_time_actual = models.DecimalField(max_digits=4, decimal_places=0, default=0, null=True, verbose_name="Факт, ч")
     Completion_rate = models.DecimalField(max_digits=4, decimal_places=3, default=0, null=True, verbose_name="Выполнение")
     Service_ownership = models.CharField(max_length=255, verbose_name="Принадлежность")
+
 
     def __str__(self):
         return f'Id {self.id}: {self.title}'

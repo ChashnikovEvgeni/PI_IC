@@ -24,5 +24,5 @@ def set_indicators_RTD_VIR(service):
         service.indicator_VIR += d.PFVIR_indicator
 
 def set_operating_time(critical_service):
-    critical_service.Operating_time_actual = critical_service.working_days_period * critical_service.working_mode_hours
+    critical_service.Operating_time_plan = critical_service.working_days_period * critical_service.working_mode_hours
     critical_service.Completion_rate = round(critical_service.Operating_time_actual / critical_service.Operating_time_plan, 3)
