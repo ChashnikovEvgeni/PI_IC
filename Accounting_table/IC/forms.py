@@ -2,9 +2,90 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.forms import ClearableFileInput
 
 from .models import *
 
+
+class ServiceForm(forms.ModelForm):
+    class Meta:
+        model = Service
+        fields = ['title', ]
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+class DepartmentForm(forms.ModelForm):
+    class Meta:
+        model = Department
+        fields = ['title', 'PPRTD_weight', 'PFVIR_weight',  'service']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'PPRTD_weight': forms.NumberInput(attrs={'class': 'form-control'}),
+            'PFVIR_weight': forms.NumberInput(attrs={'class': 'form-control'}),
+            'service': forms.Select(attrs={'class': 'form-select'}),
+        }
+
+
+class IndicatorForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['department'].empty_label = "Отдел/группа не выбраны"
+
+    class Meta:
+        model = Indicator
+        fields = ['id','title','units', 'comment', 'target_indicator', 'actual_indicator', 'Significance_of_indicator', 'Plan', 'department']
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'units': forms.TextInput(attrs={'class': 'form-control'}),
+            'comment': forms.Textarea(attrs={'class': 'form-control'}),
+            'target_indicator': forms.NumberInput(attrs={'class': 'form-control'}),
+            'actual_indicator': forms.NumberInput(attrs={'class': 'form-control'}),
+            'Significance_of_indicator': forms.NumberInput(attrs={'class': 'form-control'}),
+            'Plan': forms.NumberInput(attrs={'class': 'form-control'}),
+            'department': forms.Select(attrs={'class': 'form-select'}),
+            #'Confirmation_document': forms.FileInput(attrs={'class':'form-control','type':'file', 'accept':'application/pdf'})
+        }
+
+class Indicators_fileForm(forms.ModelForm):
+    class Meta:
+        model = Indicators_file
+        fields = ['confirmation_document']
+        widgets = {
+            'confirmation_document': ClearableFileInput(attrs={'multiple': True})
+            #'Confirmation_document': forms.FileInput(attrs={'class':'form-control','type':'file', 'accept':'application/pdf'})
+        }
+
+
+
+
+class Crtitical_serviceForm(forms.ModelForm):
+    class Meta:
+        model = Critical_service
+        fields =['title', 'working_mode_days', 'working_mode_hours', 'working_days_period', 'Operating_time_actual',  'Service_ownership']
+
+        widgets = {
+            'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'working_mode_days': forms.NumberInput(attrs={'class': 'form-control'}),
+            'working_mode_hours': forms.NumberInput(attrs={'class': 'form-control'}),
+            'working_days_period': forms.NumberInput(attrs={'class': 'form-control'}),
+            'Operating_time_actual': forms.NumberInput(attrs={'class': 'form-control'}),
+            'Service_ownership': forms.TextInput(attrs={'class': 'form-control'}),
+        }
+
+    def clean_working_mode_days(self):
+        buffer = self.cleaned_data['working_mode_days']
+        if 1 > buffer > 7:
+            raise ValidationError('Введите число меньше или равно 7')
+        return buffer
+
+    def clean_working_mode_hours(self):
+        buffer = self.cleaned_data['working_mode_hours']
+        if 1 > buffer > 24:
+            raise ValidationError('Введите число меньше или равно 24')
+        return buffer
+
+        # а если человек введёт часов больше чем это вообще возможно?
 
 
 class RegisterUserForm(UserCreationForm):

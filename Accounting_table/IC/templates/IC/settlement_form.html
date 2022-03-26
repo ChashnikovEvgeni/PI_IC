@@ -2,21 +2,19 @@
 {% load IC_tags %}
 
 {% block settlement_form %}
-</br>
-<div class="container">
+<div class="container" >
 <div class="table-responsive">
-<table class="table table-bordered table-primary table-striped table-hover" style="border: 10px; margin-top:10%">
-    <thead><tr><th>#</th><th>Название отдела/группы</th><th>Название показателя</th><th>Единицы измерения показателя</th><th>Комментарий</th> <th>Целевой показаетль</th> <th>Вес показателя</th><th>План</th><th>Факт</th><th>Значение показателя</th></tr></thead>
+    <table class="table table-bordered table-primary table-striped table-hover" style="border: 10px; margin-top:10%">
+    <thead><tr><th>#</th><th>Название отдела/группы</th><th>Название показателя</th><th>Единицы измерения показателя</th><th>Комментарий</th> <th>Целевой показаетль</th> <th>Вес показателя</th><th>План</th><th>Факт</th><th>Значение показателя</th><th>Документ подтверждения</th><th>редактирование</th></tr></thead>
     <tbody>
 	{% for Indicator in page_obj %}
-    <tr><td>{% get_number page_obj forloop.counter %}</td><td>{{Indicator.department.title}}</td><td>{{Indicator.title}}</td><td>{{Indicator.units}}</td><td>{{Indicator.comment}}</td><td>{{Indicator.target_indicator}}</td><td>{{Indicator.Significance_of_indicator}}</td><td>{{Indicator.Plan}}</td><td>{{Indicator.actual_indicator}}</td><td>{{Indicator.Degree_of_compliance}}</td></tr>
+    <tr><td>{% get_number page_obj forloop.counter %}</td><td>{{Indicator.department.title}}</td><td>{{Indicator.title}}</td><td>{{Indicator.units}}</td><td>{{Indicator.comment}}</td><td>{{Indicator.target_indicator}}</td><td>{{Indicator.Significance_of_indicator}}</td><td>{{Indicator.Plan}}</td><td>{{Indicator.actual_indicator}}</td><td>{{Indicator.Degree_of_compliance}}</td><td><a href={{Indicator.Confirmation_document.url}} download="">{{Indicator.Confirmation_document.name}}</a></td><td><a href="{% url 'change_indicator' Indicator.id %}">редактирование</a></td></tr>
     {% endfor %}
 	</tbody>
 </table>
 </div>
 {% show_pagination page_obj=page_obj %}
 </div>
-
 {% show_critical_service request=request%}
 {% endblock %}
 

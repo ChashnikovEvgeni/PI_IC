@@ -14,12 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.conf import settings
-from django.conf.urls import url
+#from django.conf.urls import include, re_path
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, re_path
 from rest_framework.routers import SimpleRouter
+from django.conf.urls.static import static
 
-from IC.views import index, IndicatorViewSet, auth
+from IC.views import index, auth
 from django.urls import path, include
 
 #router = SimpleRouter()    #это djangorestframework  унести потом
@@ -30,26 +31,17 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', index),
     path('IC/', include('IC.urls')),
-    url('', include('social_django.urls', namespace='social')),
     path('auth/', auth),
-    path('__debug__/', include('debug_toolbar.urls')),
-
 #разнести потом всё по urls
 ]
 
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 if settings.DEBUG:
     import debug_toolbar
-    import mimetypes
-
-    mimetypes.add_type("IC/javascript", ".js", True)
     urlpatterns = [
         path('__debug__/', include(debug_toolbar.urls)),
     ] + urlpatterns
 
-def show_toolbar(request):
-    return True
-DEBUG_TOOLBAR_CONFIG = {
-    "SHOW_TOOLBAR_CALLBACK" : show_toolbar,
-}
 
 #urlpatterns += router.urls

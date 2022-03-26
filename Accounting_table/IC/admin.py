@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from IC.models import Indicator, Department, Service, Critical_service
+from IC.models import Indicator, Department, Service, Critical_service, Indicators_file
 
 
 class ServiceAdmin(admin.ModelAdmin):
@@ -21,8 +21,8 @@ class DepartmentAdmin(admin.ModelAdmin):
 class IndicatorAdmin(admin.ModelAdmin):
     list_display = ('id','title','units', 'comment', 'target_indicator', 'actual_indicator', 'Significance_of_indicator', 'Plan', 'Degree_of_compliance', 'department')
     list_display_links = ('id', )
-   # list_editable = ('title','units', 'comment', 'target_indicator', 'actual_indicator', 'Significance_of_indicator', 'Plan', 'Degree_of_compliance' )
-    list_filter = ('id', 'department' )
+    #list_editable = ('title','units', 'comment', 'target_indicator', 'actual_indicator', 'Significance_of_indicator', 'Plan', 'Degree_of_compliance' )
+    list_filter = ('department',)
     search_fields = ('title',)
 
 
@@ -35,6 +35,7 @@ class Critical_serviceAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Indicator, IndicatorAdmin)
+admin.site.register(Indicators_file)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(Critical_service, Critical_serviceAdmin)
