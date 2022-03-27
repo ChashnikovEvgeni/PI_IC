@@ -36,11 +36,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     "debug_toolbar",
-    'social_django',
     'IC.apps.IndicatorCalculatorConfig',
+
 ]
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')  # эксплуатация
 STATICFILES_DIRS = [] #нестандратные пути
 
@@ -90,7 +90,7 @@ WSGI_APPLICATION = 'Accounting_table.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'acic',
+        'NAME': 'AC',
         'USER': 'postgres',
         'PASSWORD': '123',
         'HOST': 'localhost',
@@ -99,7 +99,6 @@ DATABASES = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.github.GithubOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
 
@@ -126,7 +125,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'ru'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Moscow'
 
 USE_I18N = True
 

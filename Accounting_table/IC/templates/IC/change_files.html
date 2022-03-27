@@ -1,0 +1,46 @@
+{% extends 'IC/base.html' %}
+{% load static %}
+
+{% block change_files %}
+</br>
+
+
+</br>
+
+<div class="container" align="middle">
+<div class="card" style="width: 60rem;" align="left" >
+    <div class="card-body">
+    <p class="from-control"><h2>Редактирование файлов показателя {{indicator_title}}</h2></p>
+     </br>
+    <div class="col-12">
+<form action="{% url url_name indicator_id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+{% for file in files %}<p><a href="{% url 'delete_file' file.id  %}"><img src="{% static 'IC/images/delete.ico' %}"></a><img src="{% static 'IC/images/pdf.ico' %}"><a href={{file.confirmation_document.url}} download="">{{file.confirmation_document.name}}</a></p> <p>Дата загрузки: {{file.date_of_download}}</p> {{file.id}} </br>{% endfor %}
+
+    <div class="form-error">{{ form.non_field_errors }}</div>
+
+{% for f in form %}
+    <div class="form-error">{{ f.errors }}</div>
+   <p align="left"> <label for="{{ f.id_for_label }}" >{{f.label}}: </label>{{ f }}</p>
+{% endfor %}
+
+</br>
+<div class="row">
+    <div class="col-sm-6" align="right">
+    <button class="btn btn-primary btn-lg" type="submit">Добавить</button>
+     </div>
+    <div class="col-sm-6">
+    <a type="button" class="btn btn-primary btn-lg"  href="{% url 'indicator-show-details' indicator_id %}" >Вернуться  </a>
+    </div>
+</div>
+
+</form>
+ </div>
+</div>
+ </br>
+
+</div>
+</div>
+{% endblock %}
+

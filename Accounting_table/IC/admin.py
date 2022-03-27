@@ -19,11 +19,16 @@ class DepartmentAdmin(admin.ModelAdmin):
 
 
 class IndicatorAdmin(admin.ModelAdmin):
-    list_display = ('id','title','units', 'comment', 'target_indicator', 'actual_indicator', 'Significance_of_indicator', 'Plan', 'Degree_of_compliance', 'department', 'Confirmation_document')
+    list_display = ('id','title','units', 'comment', 'target_indicator', 'actual_indicator', 'Significance_of_indicator', 'Plan', 'Degree_of_compliance', 'department')
     list_display_links = ('id', )
     #list_editable = ('title','units', 'comment', 'target_indicator', 'actual_indicator', 'Significance_of_indicator', 'Plan', 'Degree_of_compliance' )
     list_filter = ('department',)
     search_fields = ('title',)
+
+class Indicators_fileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'confirmation_document', 'date_of_download', 'indicator')
+    list_display_links = ('id',)
+    list_filter = ('indicator',)
 
 
 class Critical_serviceAdmin(admin.ModelAdmin):

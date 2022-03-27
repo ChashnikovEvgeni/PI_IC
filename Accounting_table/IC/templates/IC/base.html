@@ -11,7 +11,7 @@
     <link type="text/css" href="{% static 'IC/css/styles.css' %}" rel="stylesheet" />
     <title>IC</title>
 </head>
-<body style="background: linear-gradient(90deg, #aea4e3, #d3ffe8);">
+<!--<body style="background: linear-gradient(90deg, #aea4e3, #d3ffe8);">-->
 
 
 <div >
@@ -26,32 +26,31 @@
 
 
     <div class="btn-group" role="group">
-    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" data-bs-placement="top" title="Возможно использовать только если вы администратор" aria-expanded="false">
       Добавление объекта
     </button>
     <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-      <li><a class="dropdown-item" href="{% url 'add_service' %}">Добавить службу</a></li>
-      <li><a class="dropdown-item" href="{% url 'add_department' %}">Добавить отдел/группу</a></li>
-      <li><a class="dropdown-item" href="{% url 'add_indicator' %}">Добавить показатель</a></li>
-      <li><a class="dropdown-item" href="{% url 'add_critical_service' %}" >Добавить критический сервис/службу</a></li>
+      <li><a class="dropdown-item" title="Возможно использовать только если вы администратор"  href="{% url 'add_service' %}">Добавить службу</a></li>
+      <li><a class="dropdown-item"   title="Возможно использовать только если вы администратор" href="{% url 'add_department' %}">Добавить отдел/группу</a></li>
+      <li><a class="dropdown-item"  title="Возможно использовать только если вы администратор" href="{% url 'add_indicator' %}">Добавить показатель</a></li>
+      <li><a class="dropdown-item"  title="Возможно использовать только если вы администратор" href="{% url 'add_critical_service' %}" >Добавить критический сервис/службу</a></li>
 
     </ul>
   </div>
 
 
 <div class="btn-group" role="group">
-    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+    <button id="btnGroupDrop1" type="button" class="btn btn-secondary dropdown-toggle" title="Отчёты по показателям и возможность редактирования фактического их значения." data-bs-toggle="dropdown" aria-expanded="false">
       Работа с данными
     </button>
     <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-      <li><a class="dropdown-item" href="{% url 'indicator-data-input' %}">Ввод данных за отчётный период</a></li>
-      <li><a class="dropdown-item" href="{% url 'department-report-departments' %}">Отчёт отделов</a></li>
-      <li><a class="dropdown-item" href="{% url 'indicator-settlement-form' %}">Расчётная форма</a></li>
-
+      <li><a class="dropdown-item" title="Ввод данных фактического состояния по каждому из показателей." href="{% url 'indicator-data-input' %}">Ввод данных за отчётный период</a></li>
+      <li><a class="dropdown-item" title="Просмотр отчётов по каждому из отделов. Вам будет представленны суммарные показатели." href="{% url 'department-report-departments' %}">Отчёт отделов</a></li>
+      <li><a class="dropdown-item" title="Расчётная форма, показывающая подробную информацию по каждому показателю и позволяющая перейти к просмотру подробностей по каждому из них." href="{% url 'indicator-settlement-form' %}">Расчётная форма</a></li>
     </ul>
   </div>
 
-        <a class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top" href="{% url 'logout' %}" role="button">{{user.username}} </a>
+        <a class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Выход из аккаунта" href="{% url 'logout' %}" role="button">{{user.username}} </a>
 				{% else %}
 				<a class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top" href="{% url 'register' %}" role="button">Регистрация</a><a class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top" href="{% url 'login' %}" role="button">Войти</a>
 				{% endif %}
@@ -77,7 +76,14 @@
 {% block data_input %}
 {% endblock %}
 
-{% block add_indicator %}
+{% block add_object %}
+{% endblock %}
+
+{% block change_object %}
+{% endblock %}
+
+
+{% block change_files %}
 {% endblock %}
 
 {% block register %}
@@ -87,6 +93,8 @@
 {% block login %}
 {% endblock %}
 
+{% block indicator_detail %}
+{% endblock %}
 <script  type="text/javascript" src="{% static 'IC/js/bootstrap.bundle.min.js' %}" ></script>
 </body>
 </html>

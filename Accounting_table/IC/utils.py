@@ -4,22 +4,12 @@ from django.db.models import Count
 
 from .models import *
 
-menu = [{'title': "Главная страница", 'url_name': 'home'},
-        {'title': "Ввод данных за отчётный период", 'url_name': 'indicator-data-input'},
-        {'title': "Отчёт отделов", 'url_name': 'department-report-departments'},
-        {'title': "Расчётная форма", 'url_name': 'indicator-settlement-form'},
-]
+from rest_framework.pagination import PageNumberPagination
+from django.core.paginator import Paginator
 
-class DataMixin:
-    paginate_by = 2
+def get_page_obj(queryset, num_objects, request=None):
+    paginator = Paginator(queryset, num_objects)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return page_obj
 
-    def get_user_context(self, **kwargs):
-        print(kwargs)
-        context = kwargs
-        user_menu = menu.copy()
-        if self.request.user.is_authenticated:
-                print('ну кек')
-
-
-        context['user_menu'] = user_menu
-        return context

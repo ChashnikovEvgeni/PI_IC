@@ -5,6 +5,7 @@ from django.core.files.storage import FileSystemStorage
 from django.db import models
 from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.template.backends import django
 from django.urls import reverse
 
 
@@ -70,7 +71,6 @@ class Indicator(models.Model):
                                            verbose_name="Фактический показатель")
     Significance_of_indicator = models.DecimalField(max_digits=5, decimal_places=4, verbose_name="Вес показателя")
     Plan = models.DecimalField(max_digits=4, decimal_places=1, default=0, verbose_name="План")
-    # в excel значение показателя за отчётный период
     Degree_of_compliance = models.DecimalField(max_digits=4, decimal_places=1, default=0, verbose_name="Выполнение")
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, verbose_name="отдел/группа")
 
@@ -97,14 +97,15 @@ class Indicator(models.Model):
 
 
 class Indicators_file(models.Model):
-    confirmation_document = models.FileField(upload_to="documents/", null=True, verbose_name="Подтверждающий документ")
+    confirmation_document = models.FileField(upload_to="documents/", null=True, verbose_name="Подтверждающие документы")
+    date_of_download = models.DateTimeField(auto_now_add=True, verbose_name="Дата загрузки документа")
     indicator = models.ForeignKey(Indicator, on_delete=models.CASCADE, null=True, verbose_name="Показатель")
 
     def __str__(self):
         return f'Id {self.confirmation_document}'
 
     def get_absolute_url(self):
-        return reverse('Indicators_file-detail', kwargs={'pk': self.pk})
+        return reverse('indicators_file-detail', kwargs={'pk': self.pk})
 
     class Meta:
         verbose_name = 'Подтверждающий документ'

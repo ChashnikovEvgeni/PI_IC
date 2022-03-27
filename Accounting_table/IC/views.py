@@ -7,7 +7,7 @@ from django.shortcuts import render, redirect  # шаблонизатор фре
 from django.views.generic import CreateView, ListView
 from django_filters.rest_framework import DjangoFilterBackend
 from requests import Response
-from rest_framework import renderers, permissions
+from rest_framework import renderers, permissions, status
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
@@ -25,7 +25,6 @@ from .utils import *
 
 
 def index(request):
-    user_menu = menu
     return render(request, 'IC/index.html')
 
 
@@ -111,10 +110,43 @@ class IndicatorViewSet(ModelViewSet):
         return render(request, 'IC/settlement_form.html',
                       {'page_obj': page_obj, 'list': self.queryset})
 
+    @action(detail=True, methods=['get', 'post', 'put', 'delete'], name='Show Details')
+    def show_details(self, request, pk):
+        indicator = Indicator.objects.get(pk=pk)
+        files = indicator.indicators_file_set.all()
+        print('yes')
+        return render(request, 'IC/Indicator_detail.html',
+                      { 'indicator': indicator, 'files': files})
+
     @action(detail=False, methods=['get', 'post', 'put', 'delete'], name='Data input')
     def data_input(self, request, *args, **kwargs):
         page_obj = get_page_obj(self.queryset, 6, request)
         return render(request, 'IC/data_input.html', {'page_obj': page_obj, 'list': self.queryset})
+
+
+def change_files(request, indicator_id=None):
+    indicator = Indicator.objects.get(pk=indicator_id)
+    files = indicator.indicators_file_set.all()
+    template = 'IC/change_files.html'
+    context = {
+        'url_name': 'change_files',
+    }
+    if request.method == 'POST':
+        file_form = Indicators_fileForm(request.POST, request.FILES)
+        files = request.FILES.getlist('confirmation_document')
+        if file_form.is_valid():
+            for f in files:
+                indicators_file_instance = Indicators_file(confirmation_document=f, indicator=indicator)
+                indicators_file_instance.save()
+            return redirect('indicator-show-details', indicator_id)
+    else:
+        file_form = Indicators_fileForm(None)
+        context['form'] = file_form
+        context['indicator_id'] = indicator.id
+        context['indicator_title'] = indicator.title
+        context['files'] = files
+    return render(request, template, context)
+
 
 
 def forms_indicator(request, indicator_id=None):
@@ -155,8 +187,17 @@ def forms_indicator(request, indicator_id=None):
 class Indicators_fileViewSet(ModelViewSet):
     queryset = Indicators_file.objects.select_related(
         'indicator')
-    serializer_class = IndicatorSerializer
-    permission_classes = [IsAuthenticated]
+    serializer_class = Indicators_fileSerializer
+
+
+def delete_file(request, id):
+    try:
+        file =  Indicators_file.objects.get(id=id)
+        file.delete()
+        return redirect('change_files', file.indicator.id)
+    except  Indicators_file.DoesNotExist:
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 
 
@@ -192,15 +233,14 @@ def forms_crirtical_service(request, critical_service_id=None):
     return render(request, template, context)
 
 
-class RegisterUser(DataMixin, CreateView):
+class RegisterUser(CreateView):
     form_class = RegisterUserForm
     template_name = 'IC/register.html'
     success_url = reverse_lazy('login')
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title="Регистрация")
-        return dict(list(context.items()) + list(c_def.items()))
+        return dict(list(context.items()))
 
     def form_valid(self, form):
         user = form.save()
@@ -208,14 +248,14 @@ class RegisterUser(DataMixin, CreateView):
         return redirect('home')
 
 
-class LoginUser(DataMixin, LoginView):
+class LoginUser(LoginView):
     form_class = LoginUserForm
     template_name = 'IC/login.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        c_def = self.get_user_context(title="Авторизация")
-        return dict(list(context.items()) + list(c_def.items()))
+
+        return dict(list(context.items()))
 
     def get_success_url(self):
         return reverse_lazy('home')
@@ -225,12 +265,6 @@ def logout_user(request):
     logout(request)
     return redirect('login')
 
-
-def get_page_obj(queryset, num_objects, request=None):
-    paginator = Paginator(queryset, num_objects)
-    page_number = request.GET.get('page')
-    page_obj = paginator.get_page(page_number)
-    return page_obj
 
 
 def all_Indicators(request):
