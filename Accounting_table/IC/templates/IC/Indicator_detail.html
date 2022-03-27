@@ -5,45 +5,6 @@
 
 </br>
 <div class="container" >
-<h2>Подробности по показателю:</h2>
-</br>
-<dl class="row">
-  <dt class="col-sm-5">Название показателя:</dt>
-  <dd class="col-sm-7">{{indicator.title}}</dd>
-
-  <dt class="col-sm-5">Отдел группа:</dt>
-  <dd class="col-sm-7">{{indicator.department.title}}</dd>
-
-  <dt class="col-sm-5">Единицы измерения:</dt>
-  <dd class="col-sm-7">{{indicator.units}}</dd>
-
-  <dt class="col-sm-5">Комментарий:</dt>
-  <dd class="col-sm-7"><p>{{indicator.comment}}</p></dd>
-
-
-  <dt class="col-sm-5">Целевой показатель:</dt>
-  <dd class="col-sm-7">{{indicator.target_indicator}}</dd>
-
-  <dt class="col-sm-5">Вес показателя:</dt>
-  <dd class="col-sm-7">{{indicator.Significance_of_indicator}}</dd>
-
-  <dt class="col-sm-5">План:</dt>
-  <dd class="col-sm-7">{{indicator.Plan}}</dd>
-
-  <dt class="col-sm-5">Факт:</dt>
-  <dd class="col-sm-7">{{indicator.actual_indicator}}</dd>
-
-  <dt class="col-sm-5">Значение показателя:</dt>
-  <dd class="col-sm-7">{{indicator.Degree_of_compliance}}</dd>
-
-  <dt class="col-sm-5">Подтверждающие документы:</dt>
-
-
-    <dd class="col-sm-7">{% for file in files %}<p><img src="{% static 'IC/images/pdf.ico' %}"><a href={{file.confirmation_document.url}} download="">{{file.confirmation_document.name}}</a>   {{file.date_of_download}}</p>{% endfor %}</dd>
-
-
-</dl>
-</br>
 
 <!-- Вариант таблицей-->
 <h2>Подробности по показателю:</h2>
@@ -101,6 +62,7 @@
 <div align="middle">
 <a type="button" class="btn btn-outline-primary" href="{% url 'change_indicator' indicator.id %}" >Редактировать показатель</a>
 <a type="button" class="btn btn-outline-primary" href="{% url 'change_files' indicator.id %}" >Изменить документы подтверждения</a>
+<a type="button" class="btn btn-outline-primary"  href="{% url 'indicator-settlement-form' %}" >Вернуться назад</a>
 </div>
 </div>
 </br>
