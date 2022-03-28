@@ -20,6 +20,7 @@ class Service(models.Model):
     def get_absolute_url(self):
         return reverse('service-detail', kwargs={'pk': self.pk})
 
+# для пересчёта итогового показателя службы
     def save(self, *args, **kwargs):
         from IC.logic import set_indicators_RTD_VIR
         set_indicators_RTD_VIR(self)
@@ -45,11 +46,12 @@ class Department(models.Model):
     PFVIR_indicator = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="ПФВИР Показатель")
 
     def __str__(self):
-        return f'Id {self.id}: {self.title}'
+        return f'  {self.title}'
 
     def get_absolute_url(self):
         return reverse('department-detail', kwargs={'pk': self.pk})
 
+    # для пересчёта итогового показателя отдела/группы
     def save(self, *args, **kwargs):
         from IC.logic import set_department_indicator
         set_department_indicator(self)
@@ -64,8 +66,8 @@ class Department(models.Model):
 
 class Indicator(models.Model):
     title = models.CharField(max_length=255, verbose_name="Название")
-    units = models.CharField(max_length=255, verbose_name="Единицы измерения")
-    comment = models.TextField(verbose_name="Комментарий")
+    units = models.CharField(max_length=255, verbose_name="Единицы измерения", null=True)
+    comment = models.TextField(verbose_name="Комментарий", null=True, blank=True)
     target_indicator = models.DecimalField(max_digits=4, decimal_places=1, default=0, verbose_name="Целевой показатель")
     actual_indicator = models.DecimalField(max_digits=4, decimal_places=1, default=0,
                                            verbose_name="Фактический показатель")
@@ -79,11 +81,12 @@ class Indicator(models.Model):
     def __str__(self):
         return f'Id {self.id}: {self.title}'
 
-    # персчёт коэффициента соответствия при каждом изменении
+
 
     def get_absolute_url(self):
         return reverse('indicator-detail', kwargs={'pk': self.pk})
 
+    # персчёт коэффициента соответствия при каждом изменении
     def save(self, *args, **kwargs):
         from IC.logic import set_Degree_of_compliance
         set_Degree_of_compliance(self)
@@ -134,6 +137,7 @@ class Critical_service(models.Model):
     def get_absolute_url(self):
         return reverse('critical_service-detail', kwargs={'pk': self.pk})
 
+     # пересчёт времени при изменении и добавлении объекта в базе
     def save(self, *args, **kwargs):
         from IC.logic import set_operating_time
         set_operating_time(self)
@@ -143,6 +147,8 @@ class Critical_service(models.Model):
         verbose_name = 'Критически важные сервисы/службы'
         verbose_name_plural = 'Критически важные сервисы/службы'
         ordering = ['title']
+
+
 
 # @receiver(pre_save, sender=Indicator)
 # def set_Degees(sender, instance, **kwargs):

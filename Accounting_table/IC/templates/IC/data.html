@@ -1,0 +1,94 @@
+{% extends 'IC/base.html' %}
+{% load IC_tags %}
+
+{% block change_object %}
+</br>
+<div class="container" align="center">
+    <div class="col-12">
+        <p class="from-control"><h2>{{title}}</h2></p>
+
+
+<div class="table-responsive">
+<table class="table table-bordered table-secondary table-striped table-hover" style="border: 10px; margin-top:10%">
+    <thead>
+    <tr>
+
+        <th><p align="top">Название отдела/группы</p></th>
+        <th><p align="top">Название показателя</p></th>
+        <th><p align="top">Целевой показаетль</p></th>
+        <th><p align="top">Фактическое значение показателя</p></th>
+        <th><p align="top">Приложить документ</p></th>
+        <th><p align="top">Подтверждение действия</p></th>
+    </tr>
+    </thead>
+
+<tbody>
+
+{% for form in forms %}
+<form action="{% url url_name form.instance.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-error">{{ form.non_field_errors }}</div>
+<tr>
+
+    <td>
+       {{form.instance.department}}
+    </td>
+    <td>
+    {{form.instance.title}}
+    </td>
+    <td>
+    {{form.instance.target_indicator}}
+    </td>
+    <td>
+    {{form.actual_indicator}}
+    </td>
+    <a style="display: none;">  {{form.department}}</a>
+    <a style="display: none;"> {{form.title}}</a>
+     <a style="display: none;">{{form.target_indicator}}</a>
+   <a style="display: none;"> {{form.units}}</a>
+
+    <a style="display: none;"> {{form.Significance_of_indicator}}</a>
+    <a style="display: none;"> {{form.Plan}}</a>
+
+
+
+    <td>{% for file in fform %}
+    <div class="form-error">{{ file.errors }}</div>
+   <p align="left"> {{ file }}</p>
+    {% endfor %}</td>
+
+   <td> <div class="d-grid gap-2">
+    <button class="btn btn-outline-primary" type="submit">Сохранить измения</button>
+</div>
+   </td>
+</tr>
+
+
+
+</form>
+{% endfor %}
+
+
+</tbody>
+</table>
+</div>
+
+
+ </div>
+    {% show_pagination page_obj=page_obj %}
+</div>
+ </br>
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

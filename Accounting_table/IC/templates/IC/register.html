@@ -1,9 +1,9 @@
 {% extends 'IC/base.html' %}
 
 {% block register %}
-
+</br>
 <div class="container">
-<h1>{{title}}</h1>
+    <h2>Зарегистрируйтесь или <a href="{% url 'login' %}" title="Войти в существующий аккаунт">войдите </a> </h2>
 
 <form method="post">
     {% csrf_token %}

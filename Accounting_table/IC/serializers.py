@@ -20,8 +20,7 @@ class IndicatorSerializer(ModelSerializer):
     class Meta:
         model = Indicator
         fields = '__all__'
-        # fields = ('Department_name', 'title', 'units', 'comment', 'target_indicator', 'Significance_of_indicator', 'Plan', 'actual_indicator', 'Degree_of_compliance')
-    # Determine the fields to apply...
+
 
 class Indicators_fileSerializer(ModelSerializer):
     class Meta:

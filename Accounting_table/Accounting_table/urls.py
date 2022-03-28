@@ -20,23 +20,20 @@ from django.urls import include, re_path
 from rest_framework.routers import SimpleRouter
 from django.conf.urls.static import static
 
-from IC.views import index, auth
+from IC.views import index
 from django.urls import path, include
 
-#router = SimpleRouter()    #это djangorestframework  унести потом
-
-#router.register(r'Indicator', IndicatorViewSet)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('index/', index),
     path('IC/', include('IC.urls')),
-    path('auth/', auth),
-#разнести потом всё по urls
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+# Включение Django Debug Toolbar при включённом debug приложения
 if settings.DEBUG:
     import debug_toolbar
     urlpatterns = [
@@ -44,4 +41,3 @@ if settings.DEBUG:
     ] + urlpatterns
 
 
-#urlpatterns += router.urls

@@ -16,15 +16,51 @@
 <form action="{% url url_name indicator_id %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
-{% for file in files %}<p><a href="{% url 'delete_file' file.id  %}"><img src="{% static 'IC/images/delete.ico' %}"></a><img src="{% static 'IC/images/pdf.ico' %}"><a href={{file.confirmation_document.url}} download="">{{file.confirmation_document.name}}</a></p> <p>Дата загрузки: {{file.date_of_download}}</p> {{file.id}} </br>{% endfor %}
+<!-- Вывод файлов на экран + модальное окно -->
+<ul class="list-group list-group-flush">
+{% for file in files %}
+ <li class="list-group-item">
+    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+  Удалить файл
+</button>
+
+<!-- Модальное окно -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Подтверждение</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <p>  Подтвердите удаление файла: </p>  <img src="{% static 'IC/images/pdf.ico' %}"><a href={{file.confirmation_document.url}} download="">{{file.confirmation_document.name}}</a></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+        <a type="button" class="btn btn-primary" href="{% url 'delete_file' file.id  %}">Удалить</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Конец кода модального окна -->
+
+    <img src="{% static 'IC/images/pdf.ico' %}"><a href={{file.confirmation_document.url}} download="">{{file.confirmation_document.name}}</a></p>
+    <p>Дата загрузки: {{file.date_of_download}}</p> </br>
+</li>
+</br>
+
+    {% endfor %}
+    </ul>
 
     <div class="form-error">{{ form.non_field_errors }}</div>
 
 {% for f in form %}
     <div class="form-error">{{ f.errors }}</div>
-   <p align="left"> <label for="{{ f.id_for_label }}" >{{f.label}}: </label>{{ f }}</p>
-{% endfor %}
+   <p align="left"> <label for="{{ f.id_for_label }}" >Добавить подтверждающие документы: </label>{{ f }}</p>
+    {% endfor %}
 
+
+<!-- Кнопки действия -->
 </br>
 <div class="row">
     <div class="col-sm-6" align="right">

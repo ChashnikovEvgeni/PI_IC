@@ -27,7 +27,7 @@ from .utils import *
 def index(request):
     return render(request, 'IC/index.html')
 
-
+#Набор представлений службы
 class ServiceViewSet(ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
@@ -60,6 +60,8 @@ def forms_service(request, service_id=None):
     return render(request, template, context)
 
 
+#Набор представлений отдела/группы
+
 class DepartmentViewSet(ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
@@ -67,11 +69,11 @@ class DepartmentViewSet(ModelViewSet):
 
     @action(detail=False, methods=['get', 'post', 'put', 'delete'], name='report_departments')
     def report_departments(self, request, *args, **kwargs):
-        page_obj = get_page_obj(self.queryset, 1, request)
+        page_obj = get_page_obj(self.queryset, 5, request)
         return render(request, 'IC/report_departments.html',
                       {'page_obj': page_obj, 'list': self.queryset})
 
-
+# формы добвления/изменения отдела/группы
 def forms_department(request, department_id=None):
     if department_id is None:
         department = None
@@ -98,32 +100,69 @@ def forms_department(request, department_id=None):
     return render(request, template, context)
 
 
+#Набор представлений показателей
+
 class IndicatorViewSet(ModelViewSet):
     queryset = Indicator.objects.select_related(
         'department')  # жадная загрузка, чтобы по сто раз не спрашивать базу данных
     # permission_classes = [IsAuthenticated]
     serializer_class = IndicatorSerializer
 
+    # представление для Расчётной формы
     @action(detail=False, methods=['get', 'post', 'put', 'delete'], name='Settlement form')
     def settlement_form(self, request, *args, **kwargs):
         page_obj = get_page_obj(self.queryset, 6, request)
         return render(request, 'IC/settlement_form.html',
                       {'page_obj': page_obj, 'list': self.queryset})
 
+    # представление для просмотра подробностей показателя
     @action(detail=True, methods=['get', 'post', 'put', 'delete'], name='Show Details')
     def show_details(self, request, pk):
         indicator = Indicator.objects.get(pk=pk)
         files = indicator.indicators_file_set.all()
-        print('yes')
         return render(request, 'IC/Indicator_detail.html',
                       { 'indicator': indicator, 'files': files})
 
+    # представление для ввода данных
     @action(detail=False, methods=['get', 'post', 'put', 'delete'], name='Data input')
     def data_input(self, request, *args, **kwargs):
         page_obj = get_page_obj(self.queryset, 6, request)
         return render(request, 'IC/data_input.html', {'page_obj': page_obj, 'list': self.queryset})
 
 
+def data_input1(request, indicator_id=None):
+        page_obj = get_page_obj(Indicator.objects.all(), 6, request)
+        context = { 'url_name': 'input2'}
+        forms = []
+        file_form = Indicators_fileForm(None)
+        if request.method == 'POST':
+            indicator_form = IndicatorForm(request.POST, instance=Indicator.objects.get(pk=indicator_id))
+            file_form = Indicators_fileForm(request.POST, request.FILES)
+            files = request.FILES.getlist('confirmation_document')
+            if indicator_form.is_valid() and file_form.is_valid():
+                indicator_instance = indicator_form.save(commit=False)
+                indicator_instance.save()
+                for f in files:
+                    indicators_file_instance = Indicators_file(confirmation_document=f, indicator=indicator_instance)
+                    indicators_file_instance.save()
+                return redirect('home')
+        else:
+            for i in page_obj:
+                indicator_form = IndicatorForm(instance=i)
+                forms.append(indicator_form)
+          #  form = IndicatorForm(instance=Indicator.objects.get(pk=3))
+            file_form = Indicators_fileForm(None)
+            context['fform'] = file_form
+            context['forms'] = forms
+            context['page_obj'] = page_obj
+        return render(request, 'IC/data.html', context)
+
+
+
+
+
+
+# представление для удаления/добавления файлов подтверждения значения показателя
 def change_files(request, indicator_id=None):
     indicator = Indicator.objects.get(pk=indicator_id)
     files = indicator.indicators_file_set.all()
@@ -148,7 +187,7 @@ def change_files(request, indicator_id=None):
     return render(request, template, context)
 
 
-
+# формы добвления/изменения показателя
 def forms_indicator(request, indicator_id=None):
     if indicator_id is None:
         indicator = None
@@ -184,6 +223,10 @@ def forms_indicator(request, indicator_id=None):
         context['fform'] = file_form
     return render(request, template, context)
 
+
+
+
+# набор представлений для файлов подтверждения показателя
 class Indicators_fileViewSet(ModelViewSet):
     queryset = Indicators_file.objects.select_related(
         'indicator')
@@ -200,13 +243,13 @@ def delete_file(request, id):
 
 
 
-
+# набор представлений для критических сервисов/служб
 class Critical_serviceViewSet(ModelViewSet):
     queryset = Critical_service.objects.all()
     serializer_class = Critical_serviceSerializer
     permission_classes = [IsAuthenticated]
 
-
+# формы добвления/изменения критических сервисов/служб
 def forms_crirtical_service(request, critical_service_id=None):
     if critical_service_id is None:
         cs = None
@@ -233,6 +276,7 @@ def forms_crirtical_service(request, critical_service_id=None):
     return render(request, template, context)
 
 
+# Представление для регистрации пользователя
 class RegisterUser(CreateView):
     form_class = RegisterUserForm
     template_name = 'IC/register.html'
@@ -247,7 +291,7 @@ class RegisterUser(CreateView):
         login(self.request, user)
         return redirect('home')
 
-
+# Представление для авторизации пользователя
 class LoginUser(LoginView):
     form_class = LoginUserForm
     template_name = 'IC/login.html'
@@ -260,30 +304,15 @@ class LoginUser(LoginView):
     def get_success_url(self):
         return reverse_lazy('home')
 
-
+# Функция выхода из аккаунта
 def logout_user(request):
     logout(request)
     return redirect('login')
 
 
 
-def all_Indicators(request):
-    Indicators = Indicator.objects.all()
-    return HttpResponse({Indicators})
 
 
-def all_Departments(request):
-    Departments = Department.objects.all()
-    return HttpResponse({Departments})
-
-
-def all_Service(request):
-    service = Service.objects.all()
-    return HttpResponse({service})
-
-
-def auth(request):
-    return render(request, 'oauth.html')
 
 # permission_classes = [IsOwnerOrStaffOrReadOnly]
 # как пользоваться фильтрами, поиском, сортировкой
