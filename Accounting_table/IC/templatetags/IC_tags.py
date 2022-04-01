@@ -26,10 +26,6 @@ def show_pagination(page_obj):
 
 @register.simple_tag
 def get_number(page_obj, curr_num):
-   # print(len(page_obj))
-   # print(page_obj.number)
-   # print(curr_num)
-    #print(len(page_obj.paginator.object_list))
-    #(page_obj.start_index - page_obj.end_index) /
-    page_number = (page_obj.number-1)*math.ceil(page_obj.paginator.count/page_obj.paginator.num_pages) + curr_num
+   # page_number = (page_obj.number-1)*math.ceil(page_obj.paginator.count/page_obj.paginator.num_pages) + curr_num
+    page_number = (page_obj.number-1)*(len(page_obj)+1)+curr_num
     return (page_number)

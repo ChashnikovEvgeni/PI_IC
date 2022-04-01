@@ -111,7 +111,7 @@ class IndicatorViewSet(ModelViewSet):
     # представление для Расчётной формы
     @action(detail=False, methods=['get', 'post', 'put', 'delete'], name='Settlement form')
     def settlement_form(self, request, *args, **kwargs):
-        page_obj = get_page_obj(self.queryset, 6, request)
+        page_obj = get_page_obj(self.queryset, 5, request)
         return render(request, 'IC/settlement_form.html',
                       {'page_obj': page_obj, 'list': self.queryset})
 
@@ -124,13 +124,13 @@ class IndicatorViewSet(ModelViewSet):
                       { 'indicator': indicator, 'files': files})
 
     # представление для ввода данных
-    @action(detail=False, methods=['get', 'post', 'put', 'delete'], name='Data input')
-    def data_input(self, request, *args, **kwargs):
-        page_obj = get_page_obj(self.queryset, 6, request)
-        return render(request, 'IC/data_input.html', {'page_obj': page_obj, 'list': self.queryset})
+  #  @action(detail=False, methods=['get', 'post', 'put', 'delete'], name='Data input')
+   # def data_input(self, request, *args, **kwargs):
+    #    page_obj = get_page_obj(self.queryset, 6, request)
+      #  return render(request, 'IC/data_input.html', {'page_obj': page_obj, 'list': self.queryset})
 
 
-def data_input1(request, indicator_id=None):
+def data_input(request, indicator_id=None):
         page_obj = get_page_obj(Indicator.objects.all(), 6, request)
         context = { 'url_name': 'input2'}
         forms = []

@@ -29,8 +29,8 @@ urlpatterns = [
     path('Service/add_service/', forms_service, name='add_service'),
     path('Service/change_service/<int:service_id>', forms_service, name='change_service'),
 
-    path('Indicator/input', data_input1, name='input1'),
-    path('Indicator/input/<int:indicator_id>', data_input1, name='input2'),
+    path('Indicator/input', data_input, name='input1'),
+    path('Indicator/input/<int:indicator_id>', data_input, name='input2'),
 ]
 
 urlpatterns += router.urls

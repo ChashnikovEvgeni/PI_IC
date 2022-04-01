@@ -149,8 +149,3 @@ class Critical_service(models.Model):
         ordering = ['title']
 
 
-
-# @receiver(pre_save, sender=Indicator)
-# def set_Degees(sender, instance, **kwargs):
-#   from IC.logic import set_Degree_of_compliance
-#  instance.Degree_of_compliance = set_Degree_of_compliance(instance)
