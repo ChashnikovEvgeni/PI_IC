@@ -1,3 +1,4 @@
+import os
 import sys
 
 from django.contrib.auth.models import User
@@ -99,10 +100,52 @@ class Indicator(models.Model):
         ordering = ['department', 'title']
 
 
+
+#class MyStorage(FileSystemStorage):
+   # def get_available_name(self, name, max_length=None):
+      #  if self.exists(name):
+          #  dir_name, file_name = os.path.split(name)
+           # file_root, file_ext = os.path.splitext(file_name)
+            #print(file_root[-8:-2])
+           # if (len(name) > 12 and name[-12:-4] == 'Версия'):
+               # my_chars = int(name[-5:-4]) + 1
+                #file_root = file_root[:-1]
+               # name = os.path.join(dir_name, '{}_{}{}'.format(file_root, my_chars, file_ext))
+           # else:
+
+       # my_chars = 'Версия_2'
+
+      #  name = os.path.join(dir_name, '{}_{}{}'.format(file_root, my_chars, file_ext))
+      #  return name
+
+
+# Storage добовляющий номер версии к документу
+class MyStorage(FileSystemStorage):
+
+    def get_available_name(self, name, max_length=None):
+        if self.exists(name):
+            dir_name, file_name = os.path.split(name)
+            file_root, file_ext = os.path.splitext(file_name)
+            stroka = file_root[-8:-2]
+           # print(file_root[-1:])
+
+            if (stroka == 'Версия'):
+               my_chars = int(file_root[-1:]) + 1
+               file_root = file_root[:-1]
+               name = os.path.join(dir_name, '{}{}{}'.format(file_root, my_chars, file_ext))
+            else:
+                my_chars = 'Версия_2'  # The characters you want to append
+                name = os.path.join(dir_name, '{}_{}{}'.format(file_root, my_chars, file_ext))
+        return name
+
 class Indicators_file(models.Model):
-    confirmation_document = models.FileField(upload_to="documents/", null=True, verbose_name="Подтверждающие документы")
+    confirmation_document = models.FileField(storage=MyStorage(), upload_to="documents/", null=True, verbose_name="Подтверждающие документы")
     date_of_download = models.DateTimeField(auto_now_add=True, verbose_name="Дата загрузки документа")
     indicator = models.ForeignKey(Indicator, on_delete=models.CASCADE, null=True, verbose_name="Показатель")
+
+    def return_filename(self):
+        dir_name, file_name = os.path.split(self.confirmation_document.name)
+        return file_name
 
     def __str__(self):
         return f'Id {self.confirmation_document}'

@@ -67,7 +67,7 @@ class DepartmentViewSet(ModelViewSet):
     serializer_class = DepartmentSerializer
     permission_classes = [IsAuthenticated]
 
-    @action(detail=False, methods=['get', 'post', 'put', 'delete'], name='report_departments')
+    @action(detail=False, methods=['get'], name='report_departments')
     def report_departments(self, request, *args, **kwargs):
         page_obj = get_page_obj(self.queryset, 5, request)
         return render(request, 'IC/report_departments.html',
@@ -109,14 +109,14 @@ class IndicatorViewSet(ModelViewSet):
     serializer_class = IndicatorSerializer
 
     # представление для Расчётной формы
-    @action(detail=False, methods=['get', 'post', 'put', 'delete'], name='Settlement form')
+    @action(detail=False, methods=['get'], name='Settlement form')
     def settlement_form(self, request, *args, **kwargs):
         page_obj = get_page_obj(self.queryset, 5, request)
         return render(request, 'IC/settlement_form.html',
                       {'page_obj': page_obj, 'list': self.queryset})
 
     # представление для просмотра подробностей показателя
-    @action(detail=True, methods=['get', 'post', 'put', 'delete'], name='Show Details')
+    @action(detail=True, methods=['get'], name='Show Details')
     def show_details(self, request, pk):
         indicator = Indicator.objects.get(pk=pk)
         files = indicator.indicators_file_set.all()
