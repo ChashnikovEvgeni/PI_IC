@@ -143,6 +143,7 @@ class Indicators_file(models.Model):
     date_of_download = models.DateTimeField(auto_now_add=True, verbose_name="Дата загрузки документа")
     indicator = models.ForeignKey(Indicator, on_delete=models.CASCADE, null=True, verbose_name="Показатель")
 
+
     def return_filename(self):
         dir_name, file_name = os.path.split(self.confirmation_document.name)
         return file_name
