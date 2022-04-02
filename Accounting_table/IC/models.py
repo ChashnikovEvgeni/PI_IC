@@ -139,7 +139,7 @@ class MyStorage(FileSystemStorage):
         return name
 
 class Indicators_file(models.Model):
-    confirmation_document = models.FileField(storage=MyStorage(), upload_to="documents/", null=True, verbose_name="Подтверждающие документы")
+    confirmation_document = models.FileField(storage=MyStorage(), upload_to="documents/", null=True, blank=True, verbose_name="Подтверждающие документы")
     date_of_download = models.DateTimeField(auto_now_add=True, verbose_name="Дата загрузки документа")
     indicator = models.ForeignKey(Indicator, on_delete=models.CASCADE, null=True, verbose_name="Показатель")
 
@@ -149,7 +149,8 @@ class Indicators_file(models.Model):
         return file_name
 
     def __str__(self):
-        return f'Id {self.confirmation_document}'
+        return f'Id {self.id, self.confirmation_document.name}'
+        #return f'Id {self.id, self.confirmation_document.name}'
 
     def get_absolute_url(self):
         return reverse('indicators_file-detail', kwargs={'pk': self.pk})

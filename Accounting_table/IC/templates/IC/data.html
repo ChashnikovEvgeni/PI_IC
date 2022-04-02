@@ -30,16 +30,16 @@
     <div class="form-error">{{ form.non_field_errors }}</div>
 <tr>
 
-    <td>
+    <td class="col-3">
        {{form.instance.department}}
     </td>
-    <td>
+    <td class="col-3">
     {{form.instance.title}}
     </td>
-    <td>
+    <td class="col-1">
     {{form.instance.target_indicator}}
     </td>
-    <td>
+    <td class="col-1">
     {{form.actual_indicator}}
     </td>
     <a style="display: none;">  {{form.department}}</a>
@@ -52,12 +52,12 @@
 
 
 
-    <td>{% for file in fform %}
+    <td class="col-3">{% for file in fform %}
     <div class="form-error">{{ file.errors }}</div>
    <p align="left"> {{ file }}</p>
     {% endfor %}</td>
 
-   <td> <div class="d-grid gap-2">
+   <td class="col-1"> <div class="d-grid gap-2">
     <button class="btn btn-outline-primary" type="submit">Сохранить измения</button>
 </div>
    </td>

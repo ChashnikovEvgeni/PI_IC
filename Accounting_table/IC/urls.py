@@ -31,6 +31,7 @@ urlpatterns = [
 
     path('Indicator/input', data_input, name='input1'),
     path('Indicator/input/<int:indicator_id>', data_input, name='input2'),
+
 ]
 
 urlpatterns += router.urls

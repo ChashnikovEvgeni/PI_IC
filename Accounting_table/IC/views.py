@@ -145,7 +145,7 @@ def data_input(request, indicator_id=None):
                 for f in files:
                     indicators_file_instance = Indicators_file(confirmation_document=f, indicator=indicator_instance)
                     indicators_file_instance.save()
-                return redirect('home')
+                return redirect('input1')
         else:
             for i in page_obj:
                 indicator_form = IndicatorForm(instance=i)
@@ -163,7 +163,7 @@ def data_input(request, indicator_id=None):
 
 
 # представление для удаления/добавления файлов подтверждения значения показателя
-def change_files(request, indicator_id=None):
+def change_files(request, indicator_id=None, back_url=None ):
     indicator = Indicator.objects.get(pk=indicator_id)
     files = indicator.indicators_file_set.all()
     template = 'IC/change_files.html'
@@ -177,7 +177,8 @@ def change_files(request, indicator_id=None):
             for f in files:
                 indicators_file_instance = Indicators_file(confirmation_document=f, indicator=indicator)
                 indicators_file_instance.save()
-            return redirect('indicator-show-details', indicator_id)
+            return redirect('change_files', indicator_id)
+        #indicator - show - details
     else:
         file_form = Indicators_fileForm(None)
         context['form'] = file_form

@@ -89,7 +89,7 @@ class Indicators_fileForm(forms.ModelForm):
         fields = ['confirmation_document']
         widgets = {
             'confirmation_document': ClearableFileInput(
-                attrs={'multiple': True, 'class': "form-control", 'type': "file", 'id': "formFile"})
+                attrs={'multiple': True, 'class': "form-control", 'type': "file", 'id': "formFile",'required': False})
         }
 
 
