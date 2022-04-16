@@ -2,6 +2,10 @@
 {% load IC_tags %}
 
 {% block settlement_form %}
+
+{% if IC.IsAccess %}
+  hello
+{% endif %}
 <div class="container" >
 <div class="table-responsive">
     <table class="table table-bordered table-striped table-hover" style="border: 10px; margin-top:10%; background: #caf0f8;">
@@ -27,6 +31,5 @@
 </div>
 {% show_pagination page_obj=page_obj %}
 </div>
-{% show_critical_service request=request%}
 {% endblock %}
 

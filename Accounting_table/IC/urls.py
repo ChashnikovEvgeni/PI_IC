@@ -21,16 +21,19 @@ urlpatterns = [
     path('Indicator/add_indicator/', forms_indicator, name='add_indicator'),
     path('Indicator/change_indicator/<int:indicator_id>', forms_indicator, name='change_indicator'),
     path('Indicator/change_files/<int:indicator_id>', change_files, name='change_files'),
-    path('Indicators_file/delete_file/<int:id>', delete_file, name='delete_file'),
+    path('deleteIndicators_file/delete_file/<int:id>', delete_file, name='delete_file'),
     path('Critical_service/add_critical_service', forms_crirtical_service, name='add_critical_service'),
     path('Critical_service/change_critical_service/<int:critical_service_id>', forms_crirtical_service, name='change_critical_service'),
     path('Department/add_department/', forms_department, name='add_department'),
     path('Department/change_department/<int:department_id>', forms_department, name='change_department'),
     path('Service/add_service/', forms_service, name='add_service'),
     path('Service/change_service/<int:service_id>', forms_service, name='change_service'),
-
+   # path(r'^delete/(?P<upload_id>\d+)$', views.delete, name='delete')
     path('Indicator/input', data_input, name='input1'),
     path('Indicator/input/<int:indicator_id>', data_input, name='input2'),
+
+    path('Critical_service/input', CS_data_input, name='CS_input1'),
+    path('Critical_service/input/<int:CS_id>', CS_data_input, name='CS_input2'),
 
 ]
 

@@ -35,7 +35,7 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href = "{% url 'home' %}">Главная</a>
           </li>
-
+            {% if perms.IC.IsEditor %}
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="offcanvasNavbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
               Добавление объекта
@@ -47,6 +47,7 @@
               <li><a class="dropdown-item" title="Возможно использовать только если вы администратор" href="{% url 'add_critical_service' %}" >Добавить критический сервис/службу</a></li>
             </ul>
           </li>
+            {% endif %}
 
 
             <li class="nav-item dropdown">
@@ -57,6 +58,7 @@
                <li><a class="dropdown-item" title="Ввод данных фактического состояния по каждому из показателей."   href="{% url 'input1' %}">Ввод данных за отчётный период</a></li>
               <li><a class="dropdown-item" title="Просмотр отчётов по каждому из отделов. Вам будет представленны суммарные показатели." href="{% url 'department-report-departments' %}">Отчёт отделов</a></li>
               <li><a class="dropdown-item" title="Расчётная форма, показывающая подробную информацию по каждому показателю и позволяющая перейти к просмотру подробностей по каждому из них."  href="{% url 'indicator-settlement-form' %}">Расчётная форма</a></li>
+              <li><a class="dropdown-item" title=""  href="{% url 'CS_input1' %}">Критически важные сервисы/службы</a></li>
             </ul>
           </li>
 
@@ -129,6 +131,11 @@
 
 {% block data %}
 {% endblock %}
+
+
+{% block CS_input %}
+{% endblock %}
+
 <script  type="text/javascript" src="{% static 'IC/js/bootstrap.bundle.min.js' %}" ></script>
 </body>
 </html>

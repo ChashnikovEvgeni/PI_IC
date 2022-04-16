@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from IC.models import Indicator, Department, Service, Critical_service, Indicators_file
+from IC.models import Indicator, Department, Service, Critical_service, Indicators_file, Profile
 
 
 class ServiceAdmin(admin.ModelAdmin):
@@ -39,9 +39,14 @@ class Critical_serviceAdmin(admin.ModelAdmin):
     search_fields = ('title',)
 
 
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('id','user','position')
+
+
 admin.site.register(Indicator, IndicatorAdmin)
 admin.site.register(Indicators_file)
 admin.site.register(Department, DepartmentAdmin)
 admin.site.register(Service, ServiceAdmin)
 admin.site.register(Critical_service, Critical_serviceAdmin)
+admin.site.register(Profile, ProfileAdmin)
 # Register your models here.

@@ -1,21 +1,80 @@
 
-
+{% extends 'IC/base.html' %}
 {% load IC_tags %}
 
 
-<div class="container">
+
+
+{% block CS_input %}
+</br>
+<div class="container" align="center">
+    <div class="col-12">
+
+
 <div class="table-responsive">
 <table class="table table-bordered table-primary table-striped table-hover" style="border: 10px; margin-top:10%">
-    <thead><tr><th>#</th><th>Критически важные сервисы/службы</th><th>Режим работы</th><th>Рабочих дней в отчётном периоде</th><th>План, ч</th> <th>Факт, ч</th> <th>Выполнение</th><th>Принадлежность</th></tr></thead>
-    <tbody>
-    {% for cs in page_obj %}
-    <tr><td>{% get_number page_obj forloop.counter %}</td><td>{{cs.title}}</td><td>{{cs.working_mode_hours}}/{{cs.working_mode_days}}</td><td>{{cs.working_days_period}}</td><td>{{cs.Operating_time_plan}}</td><td>{{cs.Operating_time_actual}}</td><td>{{cs.Completion_rate}}</td><td>{{cs.Service_ownership}}</td></tr>
-    {% endfor %}
-    </tbody>
+    <thead><tr>
+        <th><p align="top">Критически важные сервисы/службы</p></th>
+        <th><p align="top">Режим работы</p></th>
+        <th><p align="top">Рабочих дней в отчётном периоде</p></th>
+        <th><p align="top">План, ч</p></th>
+        <th><p align="top">Факт, ч</p></th>
+        <th><p align="top">Выполнение</p></th>
+        <th><p align="top">Принадлежность</p></th>
+         <th><p align="top">Подтверждение действия</p></th>
+    </tr></thead>
+<tbody>
+
+{% for form in forms %}
+<form action="{% url url_name form.instance.id %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <div class="form-error">{{ form.non_field_errors }}</div>
+<tr>
+    <td class="col-3">
+    {{form.instance.title}}
+    </td>
+    <td class="col-1">
+    {{form.instance.working_mode_hours}}/{{form.instance.working_mode_days}}
+    </td>
+      <td class="col-3">
+    {{form.instance.working_days_period}}
+    </td>
+      <td class="col-3">
+    {{form.instance.Operating_time_plan}}
+    </td>
+      <td class="col-3">
+    {{form.Operating_time_actual}}
+    </td>
+      <td class="col-3">
+    {{form.instance.Completion_rate}}
+    </td>
+      <td class="col-3">
+    {{form.instance.Service_ownership}}
+    </td>
+
+
+
+
+   <td class="col-1"> <div class="d-grid gap-2">
+    <button class="btn btn-outline-primary" type="submit">Сохранить измения</button>
+</div>
+   </td>
+</tr>
+
+
+
+</form>
+{% endfor %}
+
+
+</tbody>
 </table>
 </div>
+
+
+ </div>
     {% show_pagination page_obj=page_obj %}
 </div>
+ </br>
 
-
-
+{% endblock %}

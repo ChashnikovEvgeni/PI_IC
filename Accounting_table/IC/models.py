@@ -4,10 +4,11 @@ import sys
 from django.contrib.auth.models import User
 from django.core.files.storage import FileSystemStorage
 from django.db import models
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 from django.dispatch import receiver
 from django.template.backends import django
 from django.urls import reverse
+
 
 
 class Service(models.Model):
@@ -45,7 +46,6 @@ class Department(models.Model):
     PFVIR_weight = models.DecimalField(max_digits=5, decimal_places=4, default=0,
                                        verbose_name="Вес, приоритет функционирование ВИР")  # вес, приоритет функционирование ВИР
     PFVIR_indicator = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="ПФВИР Показатель")
-
     def __str__(self):
         return f'  {self.title}'
 
@@ -98,26 +98,6 @@ class Indicator(models.Model):
         verbose_name = 'Показатель'
         verbose_name_plural = 'Показатели'
         ordering = ['department', 'title']
-
-
-
-#class MyStorage(FileSystemStorage):
-   # def get_available_name(self, name, max_length=None):
-      #  if self.exists(name):
-          #  dir_name, file_name = os.path.split(name)
-           # file_root, file_ext = os.path.splitext(file_name)
-            #print(file_root[-8:-2])
-           # if (len(name) > 12 and name[-12:-4] == 'Версия'):
-               # my_chars = int(name[-5:-4]) + 1
-                #file_root = file_root[:-1]
-               # name = os.path.join(dir_name, '{}_{}{}'.format(file_root, my_chars, file_ext))
-           # else:
-
-       # my_chars = 'Версия_2'
-
-      #  name = os.path.join(dir_name, '{}_{}{}'.format(file_root, my_chars, file_ext))
-      #  return name
-
 
 # Storage добовляющий номер версии к документу
 class MyStorage(FileSystemStorage):
@@ -194,3 +174,27 @@ class Critical_service(models.Model):
         ordering = ['title']
 
 
+
+class Profile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='данные доступа пользователя')
+    access = models.ManyToManyField(Department, verbose_name='Имеет доступ к данным отделов/групп', blank=True)
+    list_of_positions = (
+        ('Service manager', 'Руководитель службы'),
+        ('Department/Group Leadership','Руководитель отдела/группы'),
+        ('Department/group employee', 'Работник отдела/группы'),
+        ('Administrator', 'Администратор'),
+    )
+    position = models.CharField(max_length=255, choices=list_of_positions, default='department/group employee', verbose_name='Должность')
+    class Meta:
+        verbose_name = 'Данные о доступе пользователя'
+        verbose_name_plural = 'Данные о доступе пользователей'
+        ordering = ['id']
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profile.objects.create(user=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        instance.profile.save()

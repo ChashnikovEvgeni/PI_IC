@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
-from django.forms import ClearableFileInput
+from django.forms import ClearableFileInput, CheckboxSelectMultiple
 
 from .models import *
 
@@ -22,6 +22,7 @@ class DepartmentForm(forms.ModelForm):
     class Meta:
         model = Department
         fields = ['title', 'PPRTD_weight', 'PFVIR_weight', 'service']
+
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
             'PPRTD_weight': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -97,7 +98,7 @@ class Indicators_fileForm(forms.ModelForm):
 class Crtitical_serviceForm(forms.ModelForm):
     class Meta:
         model = Critical_service
-        fields = ['title', 'working_mode_days', 'working_mode_hours', 'working_days_period', 'Operating_time_actual',
+        fields = ['title', 'working_mode_days', 'working_mode_hours', 'working_days_period', 'Operating_time_plan', 'Operating_time_actual' , 'Completion_rate',
                   'Service_ownership']
 
         widgets = {
@@ -105,7 +106,9 @@ class Crtitical_serviceForm(forms.ModelForm):
             'working_mode_days': forms.NumberInput(attrs={'class': 'form-control'}),
             'working_mode_hours': forms.NumberInput(attrs={'class': 'form-control'}),
             'working_days_period': forms.NumberInput(attrs={'class': 'form-control'}),
+            'Operating_time_plan':forms.NumberInput(attrs={'class': 'form-control'}),
             'Operating_time_actual': forms.NumberInput(attrs={'class': 'form-control'}),
+            'Completion_rate': forms.NumberInput(attrs={'class': 'form-control'}),
             'Service_ownership': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
