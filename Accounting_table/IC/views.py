@@ -1,6 +1,6 @@
 
 from django.contrib.auth import logout, login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
 from django.http import HttpResponse, Http404, HttpRequest
@@ -20,7 +20,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from .forms import *
 from .models import *
-from .permissions import IsOwnerOrStaffOrReadOnly, IsAccess
+from .permissions import IsOwnerOrStaffOrReadOnly, IsAccess, IsEditor
 from .serializers import *
 from .utils import *
 
@@ -139,7 +139,7 @@ class IndicatorViewSet(ModelViewSet):
     #    page_obj = get_page_obj(self.queryset, 6, request)
       #  return render(request, 'IC/data_input.html', {'page_obj': page_obj, 'list': self.queryset})
 
-
+@permission_required([IsEditor], raise_exception=True)
 def data_input(request, indicator_id=None):
         page_obj = get_page_obj(Indicator.objects.all(), 6, request)
         context = { 'url_name': 'input2'}
@@ -173,6 +173,7 @@ def data_input(request, indicator_id=None):
 
 
 # представление для удаления/добавления файлов подтверждения значения показателя
+@permission_required([IsEditor], raise_exception=True)
 def change_files(request, indicator_id=None ):
     indicator = Indicator.objects.get(pk=indicator_id)
     if indicator.department in request.user.profile.access.all():
@@ -201,6 +202,7 @@ def change_files(request, indicator_id=None ):
 
 
 # формы добвления/изменения показателя
+@permission_required([IsEditor], raise_exception=True)
 def forms_indicator(request, indicator_id=None):
     if indicator_id is None:
         indicator = None
@@ -246,6 +248,7 @@ class Indicators_fileViewSet(ModelViewSet):
     serializer_class = Indicators_fileSerializer
     permission_classes =(IsAuthenticated, IsAccess)
 
+@permission_required([IsEditor], raise_exception=True)
 def delete_file(request, id):
     try:
         file =  Indicators_file.objects.get(id=id)
@@ -263,6 +266,7 @@ class Critical_serviceViewSet(ModelViewSet):
     permission_classes =  (IsAuthenticated, IsAccess)
 
 # формы добвления/изменения критических сервисов/служб
+@permission_required([IsEditor], raise_exception=True)
 def forms_crirtical_service(request, critical_service_id=None):
     if critical_service_id is None:
         cs = None
@@ -288,6 +292,7 @@ def forms_crirtical_service(request, critical_service_id=None):
         context['form'] = form
     return render(request, template, context)
 
+@permission_required([IsEditor], raise_exception=True)
 def CS_data_input(request, CS_id=None):
     page_obj = get_page_obj(Critical_service.objects.all(), 6, request)
     context = {'url_name': 'CS_input2'}

@@ -23,6 +23,6 @@ class IsAccess(permissions.BasePermission):
 
 class IsEditor(permissions.BasePermission):
   def has_permission(self, request, view):
-        if request.user.profile.position == 'Administrator' or request.user.profile.position=='Service manager':
-            return  True
+        if request.user.profile.position=='Service_manager':
+            return True
         return False

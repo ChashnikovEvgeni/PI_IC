@@ -98,6 +98,9 @@ class Indicator(models.Model):
         verbose_name = 'Показатель'
         verbose_name_plural = 'Показатели'
         ordering = ['department', 'title']
+        permissions = (
+            ("IsEditor", "Can Edit Indicators"),
+        )
 
 # Storage добовляющий номер версии к документу
 class MyStorage(FileSystemStorage):
@@ -179,9 +182,9 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='данные доступа пользователя')
     access = models.ManyToManyField(Department, verbose_name='Имеет доступ к данным отделов/групп', blank=True)
     list_of_positions = (
-        ('Service manager', 'Руководитель службы'),
-        ('Department/Group Leadership','Руководитель отдела/группы'),
-        ('Department/group employee', 'Работник отдела/группы'),
+        ('Service_manager', 'Руководитель службы'),
+        ('Department/Group_Leadership','Руководитель отдела/группы'),
+        ('Department/group_employee', 'Работник отдела/группы'),
         ('Administrator', 'Администратор'),
     )
     position = models.CharField(max_length=255, choices=list_of_positions, default='department/group employee', verbose_name='Должность')
