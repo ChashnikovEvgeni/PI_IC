@@ -42,9 +42,16 @@
       <td class="col-3">
     {{form.instance.Operating_time_plan}}
     </td>
+    {% if perms.IC.IsEditor %}
       <td class="col-3">
     {{form.Operating_time_actual}}
     </td>
+    {% else %}
+    <td class="col-3">
+    {{form.instance.Operating_time_actual}}
+         </td>
+    <a style="display: none;">  {{form.Operating_time_actual}}</a>
+    {% endif %}
       <td class="col-3">
     {{form.instance.Completion_rate}}
     </td>
@@ -60,11 +67,17 @@
     <a style="display: none;"> {{form.Completion_rate}}</a>
     <a style="display: none;"> {{form.Service_ownership}}</a>
 
-
+ {% if perms.IC.IsEditor %}
    <td class="col-1"> <div class="d-grid gap-2">
     <button class="btn btn-outline-primary" type="submit">Сохранить измения</button>
 </div>
    </td>
+   {% else %}
+    <td class="col-1">
+        <p>Действие недоступно</p>
+   </td>
+    {% endif %}
+
 </tr>
 
 
