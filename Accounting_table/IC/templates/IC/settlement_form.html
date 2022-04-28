@@ -7,9 +7,24 @@
 <div class="container" >
 <div class="table-responsive">
     </br>
-    {{request.user.profile.position}}
-    {{perms.IC.Isfakerornoolder}}
-    {{perms.IC.Access}}
+    {% if page_obj.paginator.count == 0 %}
+
+    <div class="card text-center">
+  <div class="card-header">
+    Ошибка
+  </div>
+  <div class="card-body">
+    <p><h5 class="card-title">Нет доступной информации</h5></p>
+    <p class="card-text">У вас нет доступа к информации ни по одному из показателй</p>
+      <p class="card-text">Обратитесь к руководителю для получения доступа</p>
+    <a href="{% url 'home' %}" class="btn btn-primary">Вернуться на главную</a>
+  </div>
+  <div class="card-footer text-muted">
+    Ошибка
+  </div>
+</div>
+
+    {% else %}
     <table class="table table-bordered table-striped table-hover" style="border: 10px; margin-top:10%; background: #caf0f8;">
     <thead><tr><th>#</th><th>Название отдела/группы</th><th>Название показателя</th><th>Единицы измерения показателя</th><th>Комментарий</th> <th>Целевой показаетль</th> <th>Вес показателя</th><th>План</th><th>Факт</th><th>Значение показателя</th><th></th></tr></thead>
     <tbody>
@@ -33,5 +48,9 @@
 </div>
 {% show_pagination page_obj=page_obj %}
 </div>
+
+{% endif %}
+
+
 {% endblock %}
 

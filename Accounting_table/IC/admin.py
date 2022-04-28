@@ -34,13 +34,20 @@ class Indicators_fileAdmin(admin.ModelAdmin):
 class Critical_serviceAdmin(admin.ModelAdmin):
     list_display = ('id', 'title','working_mode_days', 'working_mode_hours', 'working_days_period', 'Operating_time_plan', 'Operating_time_actual', 'Completion_rate', 'Service_ownership' )
     list_display_links = ('id', )
-    #list_editable = ('title','working_mode_days', 'working_mode_hours', 'working_days_period', 'Operating_time_plan', 'Operating_time_actual', 'Completion_rate', 'Service_ownership' )
     list_filter = list_display = ('id', 'title','working_mode_days', 'working_mode_hours','Service_ownership' )
     search_fields = ('title',)
 
 
 class ProfileAdmin(admin.ModelAdmin):
     list_display = ('id','user','position')
+
+
+class ServiceAdmin(admin.ModelAdmin):
+    list_display = ('id', 'title', 'indicator_RTD', 'indicator_VIR')
+    list_display_links = ('id',)
+
+    search_fields = ('title',)
+
 
 
 admin.site.register(Indicator, IndicatorAdmin)

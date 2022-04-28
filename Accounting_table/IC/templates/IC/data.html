@@ -4,6 +4,26 @@
 {% block change_object %}
 </br>
 <div class="container" align="center">
+
+ {% if page_obj.paginator.count == 0 %}
+
+    <div class="card text-center">
+  <div class="card-header">
+    Ошибка
+  </div>
+  <div class="card-body">
+    <p><h5 class="card-title">Нет доступной информации</h5></p>
+    <p class="card-text">У вас нет доступа к информации ни по одному из показателй</p>
+      <p class="card-text">Обратитесь к руководителю для получения доступа</p>
+    <a href="{% url 'home' %}" class="btn btn-primary">Вернуться на главную</a>
+  </div>
+  <div class="card-footer text-muted">
+    Ошибка
+  </div>
+</div>
+
+    {% else %}
+
     <div class="col-12">
         <p class="from-control"><h2>{{title}}</h2></p>
 
@@ -39,9 +59,15 @@
     <td class="col-1">
     {{form.instance.target_indicator}}
     </td>
+    {% if perms.IC.IsEditor %}
     <td class="col-1">
     {{form.actual_indicator}}
     </td>
+    {% else %}
+    <td class="col-1">
+    {{form.instance.actual_indicator}}
+    </td>
+    {% endif %}
     <a style="display: none;">  {{form.department}}</a>
     <a style="display: none;"> {{form.title}}</a>
      <a style="display: none;">{{form.target_indicator}}</a>
@@ -52,15 +78,30 @@
 
 
 
+
+    {% if perms.IC.IsEditor %}
     <td class="col-3">{% for file in fform %}
     <div class="form-error">{{ file.errors }}</div>
    <p align="left"> {{ file }}</p>
     {% endfor %}</td>
 
-   <td class="col-1"> <div class="d-grid gap-2">
+     <td class="col-1"> <div class="d-grid gap-2">
     <button class="btn btn-outline-primary" type="submit">Сохранить измения</button>
 </div>
    </td>
+
+     {% else %}
+    <td class="col-3">
+        <p>Ваш уровень допуска не позволяет прикладывать документ </p>
+    </td>
+
+    <td class="col-3">
+        <p>Действие недоступно </p>
+    </td>
+
+     {% endif %}
+
+
 </tr>
 
 
@@ -79,7 +120,7 @@
 </div>
  </br>
 
-
+{% endif %}
 
 
 

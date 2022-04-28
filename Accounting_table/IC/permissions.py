@@ -1,3 +1,5 @@
+from django.db.models import Q
+from django.http import HttpResponse
 from rest_framework import permissions
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
@@ -17,12 +19,15 @@ class IsOwnerOrStaffOrReadOnly(BasePermission):
 
 class IsAccess(permissions.BasePermission):
   def has_permission(self, request, view):
-        if request.user.profile.position == 'Administrator' or request.user.profile.position=='Department/Group Leadership' or request.user.profile.position=='Service manager':
-            return  True
-        return False
+      if request.user.groups.filter(Q(name=('Администрация')) | Q(name='Руководство Службы') |  Q(name='Руководство Службы') ).values('name').count() > 0:
+          return True
+      return False
 
-class IsEditor(permissions.BasePermission):
+
+class IsEditor1(permissions.BasePermission):
   def has_permission(self, request, view):
-        if request.user.profile.position=='Service_manager':
-            return True
-        return False
+      if request.user.groups.filter(Q(name=('Администрация')) | Q(name='Руководство Службы')).values(
+              'name').count() > 0:
+          return True
+      return False
+

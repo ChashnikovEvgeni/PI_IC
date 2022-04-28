@@ -46,6 +46,7 @@ class Department(models.Model):
     PFVIR_weight = models.DecimalField(max_digits=5, decimal_places=4, default=0,
                                        verbose_name="Вес, приоритет функционирование ВИР")  # вес, приоритет функционирование ВИР
     PFVIR_indicator = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="ПФВИР Показатель")
+
     def __str__(self):
         return f'  {self.title}'
 
@@ -77,17 +78,13 @@ class Indicator(models.Model):
     Degree_of_compliance = models.DecimalField(max_digits=4, decimal_places=1, default=0, verbose_name="Выполнение")
     department = models.ForeignKey(Department, on_delete=models.CASCADE, null=True, verbose_name="отдел/группа")
 
-    # Confirmation_document = models.FileField(upload_to="documents/", null=True, verbose_name="Подтверждающий документ")
-
     def __str__(self):
         return f'Id {self.id}: {self.title}'
-
-
 
     def get_absolute_url(self):
         return reverse('indicator-detail', kwargs={'pk': self.pk})
 
-    # персчёт коэффициента соответствия при каждом изменении
+    # персчёт коэффициента соответствия при каждом изменении значения показателя
     def save(self, *args, **kwargs):
         from IC.logic import set_Degree_of_compliance
         set_Degree_of_compliance(self)
@@ -109,10 +106,10 @@ class MyStorage(FileSystemStorage):
         if self.exists(name):
             dir_name, file_name = os.path.split(name)
             file_root, file_ext = os.path.splitext(file_name)
-            stroka = file_root[-8:-2]
+            version = file_root[-8:-2]
            # print(file_root[-1:])
 
-            if (stroka == 'Версия'):
+            if (version == 'Версия'):
                my_chars = int(file_root[-1:]) + 1
                file_root = file_root[:-1]
                name = os.path.join(dir_name, '{}{}{}'.format(file_root, my_chars, file_ext))
@@ -133,7 +130,6 @@ class Indicators_file(models.Model):
 
     def __str__(self):
         return f'Id {self.id, self.confirmation_document.name}'
-        #return f'Id {self.id, self.confirmation_document.name}'
 
     def get_absolute_url(self):
         return reverse('indicators_file-detail', kwargs={'pk': self.pk})

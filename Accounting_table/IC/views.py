@@ -3,13 +3,14 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.views import LoginView
+from django.db.models import Q
 from django.http import HttpResponse, Http404, HttpRequest
 from django.shortcuts import render, redirect  # шаблонизатор фреймворка Django
 from django.views.generic import CreateView, ListView
 from django_filters.rest_framework import DjangoFilterBackend
 from requests import Response
 from rest_framework import renderers, permissions, status
-from rest_framework.decorators import action
+from rest_framework.decorators import action, api_view
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import IsAuthenticated
@@ -20,7 +21,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from .forms import *
 from .models import *
-from .permissions import IsOwnerOrStaffOrReadOnly, IsAccess, IsEditor
+from .permissions import IsOwnerOrStaffOrReadOnly, IsAccess, IsEditor1
 from .serializers import *
 from .utils import *
 
@@ -67,7 +68,7 @@ def forms_service(request, service_id=None):
 class DepartmentViewSet(ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
-    permission_classes = (IsAuthenticated, IsAccess)
+    permission_classes = (IsAuthenticated, IsEditor1)
 
     @action(detail=False, methods=['get'], name='report_departments')
     def report_departments(self, request, *args, **kwargs):
@@ -111,9 +112,8 @@ def forms_department(request, department_id=None):
 
 class IndicatorViewSet(ModelViewSet):
     queryset = Indicator.objects.select_related(
-        'department')  # жадная загрузка, чтобы по сто раз не спрашивать базу данных
-    # print(request.user.profile.access.all())
-    permission_classes = [IsAuthenticated]
+        'department')
+    permission_classes = (IsAuthenticated, )
     serializer_class = IndicatorSerializer
 
     # представление для Расчётной формы
@@ -134,14 +134,10 @@ class IndicatorViewSet(ModelViewSet):
         return HttpResponse(status=403)
 
     # представление для ввода данных
-  #  @action(detail=False, methods=['get', 'post', 'put', 'delete'], name='Data input')
-   # def data_input(self, request, *args, **kwargs):
-    #    page_obj = get_page_obj(self.queryset, 6, request)
-      #  return render(request, 'IC/data_input.html', {'page_obj': page_obj, 'list': self.queryset})
 
-@permission_required([IsEditor], raise_exception=True)
+
 def data_input(request, indicator_id=None):
-        page_obj = get_page_obj(Indicator.objects.all(), 6, request)
+        page_obj = get_page_obj(Indicator.objects.filter(department__in=request.user.profile.access.all()), 6, request)
         context = { 'url_name': 'input2'}
         forms = []
         file_form = Indicators_fileForm(None)
@@ -173,10 +169,10 @@ def data_input(request, indicator_id=None):
 
 
 # представление для удаления/добавления файлов подтверждения значения показателя
-@permission_required([IsEditor], raise_exception=True)
+#@permission_required([IsEditor1], raise_exception=True)
 def change_files(request, indicator_id=None ):
     indicator = Indicator.objects.get(pk=indicator_id)
-    if indicator.department in request.user.profile.access.all():
+    if indicator.department not in request.user.profile.access.all():
          return HttpResponse(status=403)
     files = indicator.indicators_file_set.all()
     template = 'IC/change_files.html'
@@ -202,7 +198,7 @@ def change_files(request, indicator_id=None ):
 
 
 # формы добвления/изменения показателя
-@permission_required([IsEditor], raise_exception=True)
+#@permission_required([IsEditor1], raise_exception=True)
 def forms_indicator(request, indicator_id=None):
     if indicator_id is None:
         indicator = None
@@ -246,9 +242,9 @@ class Indicators_fileViewSet(ModelViewSet):
     queryset = Indicators_file.objects.select_related(
         'indicator')
     serializer_class = Indicators_fileSerializer
-    permission_classes =(IsAuthenticated, IsAccess)
+    permission_classes =(IsAuthenticated)
 
-@permission_required([IsEditor], raise_exception=True)
+#@permission_required([IsEditor1], raise_exception=True)
 def delete_file(request, id):
     try:
         file =  Indicators_file.objects.get(id=id)
@@ -266,7 +262,7 @@ class Critical_serviceViewSet(ModelViewSet):
     permission_classes =  (IsAuthenticated, IsAccess)
 
 # формы добвления/изменения критических сервисов/служб
-@permission_required([IsEditor], raise_exception=True)
+#@permission_required([IsEditor1], raise_exception=True)
 def forms_crirtical_service(request, critical_service_id=None):
     if critical_service_id is None:
         cs = None
@@ -292,7 +288,7 @@ def forms_crirtical_service(request, critical_service_id=None):
         context['form'] = form
     return render(request, template, context)
 
-@permission_required([IsEditor], raise_exception=True)
+#@permission_required([IsEditor1], raise_exception=True)
 def CS_data_input(request, CS_id=None):
     page_obj = get_page_obj(Critical_service.objects.all(), 6, request)
     context = {'url_name': 'CS_input2'}
@@ -303,6 +299,8 @@ def CS_data_input(request, CS_id=None):
             indicator_instance = CS_form.save(commit=False)
             indicator_instance.save()
             return redirect('CS_input1')
+        else:
+            print(CS_form.errors)
     else:
         for i in page_obj:
             CS_form = Crtitical_serviceForm(instance=i)
