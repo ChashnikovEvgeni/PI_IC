@@ -11,13 +11,13 @@
     <link type="text/css" href="{% static 'IC/css/s.css' %}" rel="stylesheet" />
     <title>IC</title>
 </head>
-<!--<body style="background: linear-gradient(90deg, #aea4e3, #d3ffe8);">-->
+<body style="background-color:#dedddc; ">
 
 
-
-<nav class="navbar navbar-light fixed-top" style="background-color:#00b4d8;">
+<!--
+<nav class="navbar navbar-light fixed-top" style="background-color:#0079c2;">
   <div class="container-fluid">
-    <a class="navbar-brand" ><h4  >Учёт показателей эффективности</h4></a>
+      <a class="navbar-brand" style="color:#ffffff;"><h4  >Учёт показателей эффективности</h4></a>
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" style="color:white;" >
       <span class="navbar-toggler-icon" ></span>
     </button>
@@ -28,7 +28,7 @@
       </div>
 
 
-      {% block main_menu %}
+
       {% if request.user.is_authenticated %}
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
@@ -82,18 +82,82 @@
           </div>
 
           {% endif %}
-     {% endblock %}
+
 
 
       </div>
     </div>
   </div>
 </nav>
+-->
 
 
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color:#0079c2;" >
+  <div class="container-fluid">
+    <a class="navbar-brand" style="color:#ffffff;"><h4  >Учёт показателей эффективности</h4></a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+      {% block main_menu %}
+      {% if request.user.is_authenticated %}
+    <div class="collapse navbar-collapse" id="navbarScroll">
+      <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" style="color:#ffffff;" href = "{% url 'home' %}">Главная</a>
+        </li>
+         {% if perms.IC.IsEditor %}
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:#ffffff;">
+           Добавление объекта
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+            <li><a class="dropdown-item" title="Возможно использовать только если вы администратор"  href="{% url 'add_service' %}">Добавить службу</a></li>
+             <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" title="Возможно использовать только если вы администратор" href="{% url 'add_department' %}">Добавить отдел/группу</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" title="Возможно использовать только если вы администратор"  href="{% url 'add_indicator' %}">Добавить показатель</a></li>
+               <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" title="Возможно использовать только если вы администратор"  href="{% url 'add_critical_service' %}" >Добавить критический сервис/службу</a></li>
+          </ul>
+        </li>
+        {% endif %}
+    <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:#ffffff;">
+            Работа с данными
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+            <li><a class="dropdown-item" title="Ввод данных фактического состояния по каждому из показателей."   href="{% url 'input1' %}">Ввод данных за отчётный период</a></li>
+             <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" title="Просмотр отчётов по каждому из отделов. Вам будет представленны суммарные показатели." href="{% url 'department-report-departments' %}">Отчёт отделов</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" title="Расчётная форма, показывающая подробную информацию по каждому показателю и позволяющая перейти к просмотру подробностей по каждому из них." href="{% url 'indicator-settlement-form' %}">Расчётная форма</a></li>
+               <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item"  title=""  href="{% url 'CS_input1' %}">Критически важные сервисы/службы</a></li>
+          </ul>
+        </li>
 
-</br>
-</br>
+         <li class="nav-item">
+          <a class="nav-link active" aria-current="page" style="color:#ffffff;" href="{% url 'logout' %}">{{user.username}}</a>
+        </li>
+      </ul>
+    </div>
+      {% else %}
+      <div class="collapse navbar-collapse" id="navbarScroll">
+          <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
+            <li class="nav-item">
+          <a class="nav-link active" aria-current="page" style="color:#ffffff;" title="Регистрация нового пользователя"  href="{% url 'register' %}">Регистрация</a>
+        </li>
+         <li class="nav-item">
+          <a class="nav-link active" aria-current="page" style="color:#ffffff;"title="Вход в существующий аккаунт"   href="{% url 'login' %}">Войти</a>
+        </li>
+          </ul>
+      </div>
+       {% endif %}
+      {% endblock main_menu %}
+  </div>
+</nav>
+
+
 
 
 

@@ -29,8 +29,8 @@ class Service(models.Model):
         super().save(*args, **kwargs)
 
     class Meta:
-        verbose_name = 'Служба(уточнить название раздела)'
-        verbose_name_plural = 'Службы(уточнить название раздела)'
+        verbose_name = 'Служба'
+        verbose_name_plural = 'Службы'
         ordering = ['title']
 
 

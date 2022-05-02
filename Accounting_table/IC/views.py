@@ -10,7 +10,7 @@ from django.views.generic import CreateView, ListView
 from django_filters.rest_framework import DjangoFilterBackend
 from requests import Response
 from rest_framework import renderers, permissions, status
-from rest_framework.decorators import action, api_view
+from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import IsAuthenticated
@@ -21,7 +21,7 @@ from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from .forms import *
 from .models import *
-from .permissions import IsOwnerOrStaffOrReadOnly, IsAccess, IsEditor1
+from .permissions import IsOwnerOrStaffOrReadOnly, IsAccess, IsCreator
 from .serializers import *
 from .utils import *
 
@@ -36,7 +36,8 @@ class ServiceViewSet(ModelViewSet):
     serializer_class = ServiceSerializer
     permission_classes =  (IsAuthenticated, IsAccess)
 
-
+@api_view(['GET', 'POST'])
+@permission_classes([IsCreator])
 def forms_service(request, service_id=None):
     if service_id is None:
         service = None
@@ -68,7 +69,7 @@ def forms_service(request, service_id=None):
 class DepartmentViewSet(ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
-    permission_classes = (IsAuthenticated, IsEditor1)
+    permission_classes = (IsAuthenticated, IsAccess)
 
     @action(detail=False, methods=['get'], name='report_departments')
     def report_departments(self, request, *args, **kwargs):
@@ -82,6 +83,8 @@ class DepartmentViewSet(ModelViewSet):
                       {'page_obj': page_obj, 'list': self.queryset, 'service': service})
 
 # формы добвления/изменения отдела/группы
+@api_view(['GET', 'POST'])
+@permission_classes([IsCreator])
 def forms_department(request, department_id=None):
     if department_id is None:
         department = None
@@ -113,8 +116,9 @@ def forms_department(request, department_id=None):
 class IndicatorViewSet(ModelViewSet):
     queryset = Indicator.objects.select_related(
         'department')
-    permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated,)
     serializer_class = IndicatorSerializer
+
 
     # представление для Расчётной формы
     @action(detail=False, methods=['get'], name='Settlement form')
@@ -135,7 +139,8 @@ class IndicatorViewSet(ModelViewSet):
 
     # представление для ввода данных
 
-
+@api_view(['GET', 'POST'])
+@permission_classes([IsCreator])
 def data_input(request, indicator_id=None):
         page_obj = get_page_obj(Indicator.objects.filter(department__in=request.user.profile.access.all()), 6, request)
         context = { 'url_name': 'input2'}
@@ -156,7 +161,6 @@ def data_input(request, indicator_id=None):
             for i in page_obj:
                 indicator_form = IndicatorForm(instance=i)
                 forms.append(indicator_form)
-          #  form = IndicatorForm(instance=Indicator.objects.get(pk=3))
             file_form = Indicators_fileForm(None)
             context['fform'] = file_form
             context['forms'] = forms
@@ -169,7 +173,9 @@ def data_input(request, indicator_id=None):
 
 
 # представление для удаления/добавления файлов подтверждения значения показателя
-#@permission_required([IsEditor1], raise_exception=True)
+#@permission_required([IsCreator], raise_exception=True)
+@api_view(['GET', 'POST'])
+@permission_classes([IsCreator])
 def change_files(request, indicator_id=None ):
     indicator = Indicator.objects.get(pk=indicator_id)
     if indicator.department not in request.user.profile.access.all():
@@ -198,7 +204,9 @@ def change_files(request, indicator_id=None ):
 
 
 # формы добвления/изменения показателя
-#@permission_required([IsEditor1], raise_exception=True)
+#@permission_required([IsCreator], raise_exception=True)
+@api_view(['GET', 'POST'])
+@permission_classes([IsCreator])
 def forms_indicator(request, indicator_id=None):
     if indicator_id is None:
         indicator = None
@@ -244,7 +252,9 @@ class Indicators_fileViewSet(ModelViewSet):
     serializer_class = Indicators_fileSerializer
     permission_classes =(IsAuthenticated)
 
-#@permission_required([IsEditor1], raise_exception=True)
+#@permission_required([IsCreator], raise_exception=True)
+@api_view(['GET', 'DELETE'])
+@permission_classes([IsCreator])
 def delete_file(request, id):
     try:
         file =  Indicators_file.objects.get(id=id)
@@ -262,7 +272,9 @@ class Critical_serviceViewSet(ModelViewSet):
     permission_classes =  (IsAuthenticated, IsAccess)
 
 # формы добвления/изменения критических сервисов/служб
-#@permission_required([IsEditor1], raise_exception=True)
+#@permission_required([IsCreator], raise_exception=True)
+@api_view(['GET', 'POST'])
+@permission_classes([IsCreator])
 def forms_crirtical_service(request, critical_service_id=None):
     if critical_service_id is None:
         cs = None
@@ -288,7 +300,9 @@ def forms_crirtical_service(request, critical_service_id=None):
         context['form'] = form
     return render(request, template, context)
 
-#@permission_required([IsEditor1], raise_exception=True)
+#@permission_required([IsCreator], raise_exception=True)
+@api_view(['GET', 'POST'])
+@permission_classes([IsCreator])
 def CS_data_input(request, CS_id=None):
     page_obj = get_page_obj(Critical_service.objects.all(), 6, request)
     context = {'url_name': 'CS_input2'}
@@ -305,7 +319,6 @@ def CS_data_input(request, CS_id=None):
         for i in page_obj:
             CS_form = Crtitical_serviceForm(instance=i)
             forms.append(CS_form)
-        #  form = IndicatorForm(instance=Indicator.objects.get(pk=3))
         context['forms'] = forms
         context['page_obj'] = page_obj
     return render(request, 'IC/critical_services.html', context)
@@ -346,20 +359,3 @@ def logout_user(request):
 
 
 
-
-
-
-# permission_classes = [IsOwnerOrStaffOrReadOnly]
-# как пользоваться фильтрами, поиском, сортировкой
-# filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-# filter_fields = ['target_indicator']
-# если ищем по более чем одному полю, тогда search
-# search_fields = ['target_indicator','actual_indicator']
-# адрес по следующему формату
-# http://127.0.0.1:8000/IC/Indicator/?search=90.0
-# сортировка
-# rdering_fields = ['department']
-
-# def perform_create(self, serializer):
-#     serializer.validated_data['owner'] = self.request.user
-#    serializer.save()

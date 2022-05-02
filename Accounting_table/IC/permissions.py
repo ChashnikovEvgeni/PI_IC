@@ -18,13 +18,16 @@ class IsOwnerOrStaffOrReadOnly(BasePermission):
 
 
 class IsAccess(permissions.BasePermission):
+  message = 'Отсутствуют права доступа'
   def has_permission(self, request, view):
-      if request.user.groups.filter(Q(name=('Администрация')) | Q(name='Руководство Службы') |  Q(name='Руководство Службы') ).values('name').count() > 0:
+      if request.user.groups.filter(Q(name=('Администрация')) | Q(name='Руководство Службы') |  Q(name='Руководство отдела/группы') ).values('name').count() > 0:
           return True
       return False
 
 
-class IsEditor1(permissions.BasePermission):
+
+class IsCreator(permissions.BasePermission):
+  message = 'Отсутствуют права доступа'
   def has_permission(self, request, view):
       if request.user.groups.filter(Q(name=('Администрация')) | Q(name='Руководство Службы')).values(
               'name').count() > 0:
