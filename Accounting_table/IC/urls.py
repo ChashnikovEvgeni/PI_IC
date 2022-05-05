@@ -34,6 +34,7 @@ urlpatterns = [
 
     path('Critical_service/input', CS_data_input, name='CS_input1'),
     path('Critical_service/input/<int:CS_id>', CS_data_input, name='CS_input2'),
+    path('print_report', print_report, name='print_report'),
 
 ]
 

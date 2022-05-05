@@ -13,8 +13,12 @@ from django.urls import reverse
 
 class Service(models.Model):
     title = models.CharField(max_length=255, verbose_name="Название")
-    indicator_RTD = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="ППРТД показатель")
-    indicator_VIR = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="ПФВИР показатель")
+    indicator_PPRTD = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="ППРТД показатель")
+    sum_weight_PPRTD = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="ППРТД сумма весов")
+    indicator_PFVIR = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="ПФВИР показатель")
+    sum_weight_PFVIR = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="ПФВИР сумма весов")
+    target_indicator = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Целевой показатель")
+    value_when_reached = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Значения при достижении")
 
     def __str__(self):
         return f'Id {self.id}: {self.title}'
@@ -24,8 +28,8 @@ class Service(models.Model):
 
 # для пересчёта итогового показателя службы
     def save(self, *args, **kwargs):
-        from IC.logic import set_indicators_RTD_VIR
-        set_indicators_RTD_VIR(self)
+        from IC.logic import set_indicators_PPRTD_PFVIR
+        set_indicators_PPRTD_PFVIR(self)
         super().save(*args, **kwargs)
 
     class Meta:

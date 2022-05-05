@@ -11,9 +11,11 @@ from .models import *
 class ServiceForm(forms.ModelForm):
     class Meta:
         model = Service
-        fields = ['title', ]
+        fields = ['title','target_indicator', 'value_when_reached' ]
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control'}),
+            'target_indicator': forms.NumberInput(attrs={'class': 'form-control'}),
+            'value_when_reached': forms.NumberInput(attrs={'class': 'form-control'}),
         }
 
 

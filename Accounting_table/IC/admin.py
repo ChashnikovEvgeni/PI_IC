@@ -3,12 +3,6 @@ from django.contrib import admin
 from IC.models import Indicator, Department, Service, Critical_service, Indicators_file, Profile
 
 
-class ServiceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'indicator_RTD', 'indicator_VIR')
-    list_display_links = ('id',)
-    #list_editable = ('title', 'indicator_RTD', 'indicator_VIR')
-    search_fields = ('title',)
-
 
 class DepartmentAdmin(admin.ModelAdmin):
     list_display = ('id', 'title', 'department_indicator', 'PPRTD_weight', 'PPRTD_indicator', 'PFVIR_weight', 'PFVIR_indicator', 'service')
@@ -43,9 +37,8 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'indicator_RTD', 'indicator_VIR')
+    list_display = ('id', 'title', 'indicator_PPRTD', 'indicator_PFVIR', 'target_indicator', 'value_when_reached',)
     list_display_links = ('id',)
-
     search_fields = ('title',)
 
 

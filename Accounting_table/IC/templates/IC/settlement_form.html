@@ -26,11 +26,12 @@
 
     {% else %}
 
+
 <div class="card" style="margin-top:6%; margin-bottom:3%; margin-left:3%; margin-right:3%; "  >
 
   <div class="card-body" style=" margin-top:2%;  margin-bottom:10% " >
      <div class="container" align="center">
-    <table class="table table-primary table-bordered table-striped table-hover" style="border: 10px;">
+         <table class="table table-primary table-bordered table-striped table-hover" style="border: 10px;">
     <thead><tr><th>#</th><th>Название отдела/группы</th><th>Название показателя</th><th>Единицы измерения показателя</th><th>Комментарий</th> <th>Целевой показатель</th> <th>Вес показателя</th><th>План</th><th>Факт</th><th>Значение показателя</th><th></th></tr></thead>
     <tbody>
 	{% for Indicator in page_obj %}

@@ -1,3 +1,4 @@
+from datetime import datetime
 
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required, permission_required
@@ -8,6 +9,9 @@ from django.http import HttpResponse, Http404, HttpRequest
 from django.shortcuts import render, redirect  # шаблонизатор фреймворка Django
 from django.views.generic import CreateView, ListView
 from django_filters.rest_framework import DjangoFilterBackend
+from openpyxl import Workbook
+from openpyxl.styles import PatternFill, Border, Side, Alignment
+from openpyxl.utils import get_column_letter
 from requests import Response
 from rest_framework import renderers, permissions, status
 from rest_framework.decorators import action, api_view, permission_classes
@@ -20,6 +24,7 @@ from rest_framework.pagination import PageNumberPagination
 from django.core.paginator import Paginator
 from django.contrib.auth.models import User
 from .forms import *
+from .logic import print_settlement_form, print_report_departments, print_report_CS
 from .models import *
 from .permissions import IsOwnerOrStaffOrReadOnly, IsAccess, IsCreator
 from .serializers import *
@@ -140,7 +145,7 @@ class IndicatorViewSet(ModelViewSet):
     # представление для ввода данных
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsCreator])
+#@permission_classes([IsCreator])
 def data_input(request, indicator_id=None):
         page_obj = get_page_obj(Indicator.objects.filter(department__in=request.user.profile.access.all()), 6, request)
         context = { 'url_name': 'input2'}
@@ -357,5 +362,22 @@ def logout_user(request):
     logout(request)
     return redirect('login')
 
+
+
+def print_report(request):
+
+    response = HttpResponse(
+        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    )
+    response['Content-Disposition'] = 'attachment; filename={date}-report.xlsx'.format(
+        date=datetime.now().strftime('%Y-%m-%d'),
+    )
+    workbook = Workbook()
+    workbook.remove(workbook.active)
+    print_report_departments(request, workbook, 1)
+    print_settlement_form(request, workbook, 2)
+    print_report_CS(workbook, 3)
+    workbook.save(response)
+    return response
 
 
