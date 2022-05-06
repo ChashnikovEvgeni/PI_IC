@@ -18,7 +18,7 @@ class Service(models.Model):
     indicator_PFVIR = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="ПФВИР показатель")
     sum_weight_PFVIR = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="ПФВИР сумма весов")
     target_indicator = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Целевой показатель")
-    value_when_reached = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Значения при достижении")
+    value_when_reached = models.DecimalField(max_digits=5, decimal_places=2, default=0, verbose_name="Значение при достижении")
 
     def __str__(self):
         return f'Id {self.id}: {self.title}'
@@ -68,7 +68,9 @@ class Department(models.Model):
         verbose_name = 'Отдел/группа'
         verbose_name_plural = 'Отделы/группы'
         ordering = ['service', 'title']
-
+        permissions = (
+            ('IsEditor', 'IsEditor'),
+        )
 
 class Indicator(models.Model):
     title = models.CharField(max_length=255, verbose_name="Название")
