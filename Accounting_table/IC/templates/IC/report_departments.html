@@ -2,20 +2,26 @@
 {% load IC_tags %}
 
 {% block report_departments %}
+
+<div class = "col-md-10">
 </br>
 <div class="container">
+    <div class = "col-md-11" style="margin-left:5%">
 <div class="table-responsive">
 
     <p><h5>Служба {{ service.title }}  Итоговые показатели:  приоритет ППРТД:  {{ service.indicator_PPRTD }};  приоритет ПФВИР: {{ service.indicator_PFVIR }} </h5></p>
-<table class="table table-bordered table-primary table-striped table-hover" style="border: 10px; margin-top:10%">
-    <thead><tr><th>#</th><th>Название отдела/группы</th><th>Показатель</th><th>Вес, приоритета передачи режимно-технологических данных</th><th>Показатель</th> <th>Вес, приоритет функционирование ВИР</th> <th>Показатель</th></tr></thead>
+<table class="table table-hover" style=" margin-top:10%">
+    <thead><tr class="table-secondary" align="middle"><th># </th><th>Название отдела/группы</th><th>Показатель</th><th>Вес, приоритета передачи режимно-технологических данных</th><th>Показатель</th> <th>Вес, приоритет функционирование ВИР</th> <th>Показатель</th></tr></thead>
     <tbody>
     {% for department in page_obj %}
-    <tr><td>{% get_number page_obj forloop.counter %}</td><td>{{department.title}}</td><td>{{department.department_indicator}}</td><td>{{department.PPRTD_weight}}</td><td>{{department.PPRTD_indicator}}</td><td>{{department.PFVIR_weight}}</td><td>{{department.PFVIR_indicator}}</td></tr>
+    <tr align="middle"><td >{% get_number page_obj forloop.counter %} </td><td>{{department.title}}</td><td>{{department.department_indicator}}</td><td>{{department.PPRTD_weight}}</td><td>{{department.PPRTD_indicator}}</td><td>{{department.PFVIR_weight}}</td><td>{{department.PFVIR_indicator}}</td></tr>
     {% endfor %}
     </tbody>
 </table>
 </div>
+
 {% show_pagination page_obj %}
 </div>
+    </div>
+    </div>
 {% endblock %}

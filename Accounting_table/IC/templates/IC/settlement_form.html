@@ -1,11 +1,18 @@
 {% extends 'IC/base.html' %}
 {% load IC_tags %}
 
+
 {% block settlement_form %}
 
 
 
-<div class="table-responsive">
+
+<div class = "col-md-10">
+
+    </br>
+
+
+<div class="table-responsive" style="margin-top:5%;">
 
     {% if page_obj.paginator.count == 0 %}
 
@@ -27,26 +34,25 @@
     {% else %}
 
 
-<div class="card" style="margin-top:6%; margin-bottom:3%; margin-left:3%; margin-right:3%; "  >
 
-  <div class="card-body" style=" margin-top:2%;  margin-bottom:10% " >
-     <div class="container" align="center">
-         <table class="table table-primary table-bordered table-striped table-hover" style="border: 10px;">
-    <thead><tr><th>#</th><th>Название отдела/группы</th><th>Название показателя</th><th>Единицы измерения показателя</th><th>Комментарий</th> <th>Целевой показатель</th> <th>Вес показателя</th><th>План</th><th>Факт</th><th>Значение показателя</th><th></th></tr></thead>
+     <div class="container" >
+<div class = "col-md-10" style="margin-left:2%">
+         <table class="table   table-hover">
+    <thead><tr class="table-secondary"  align="middle"><th>#</th><th>Название отдела/группы</th><th>Название показателя</th><th>Единицы измерения показателя</th><th>Комментарий</th> <th>Целевой показатель</th> <th>Вес показателя</th><th>План</th><th>Факт</th><th>Значение показателя</th><th></th></tr></thead>
     <tbody>
 	{% for Indicator in page_obj %}
-    <tr>
-        <td>{% get_number page_obj forloop.counter %}</td>
-        <td>{{Indicator.department.title}}</td>
-        <td>{{Indicator.title}}</td>
-        <td>{{Indicator.units}}</td>
-        <td>{{Indicator.comment}}</td>
-        <td>{{Indicator.target_indicator}}</td>
-        <td>{{Indicator.Significance_of_indicator}}</td>
-        <td>{{Indicator.Plan}}</td>
-        <td>{{Indicator.actual_indicator}}</td>
-        <td>{{Indicator.Degree_of_compliance}}</td>
-        <td><a href="{% url 'indicator-show-details' Indicator.id %}">Просмотр подробностей</a></td>
+    <tr align="middle">
+        <td ><p>{% get_number page_obj forloop.counter %}</p></td>
+        <td >{{Indicator.department.title}}</td>
+        <td >{{Indicator.title}}</td>
+        <td >{{Indicator.units}}</td>
+        <td >{{Indicator.comment}}</td>
+        <td >{{Indicator.target_indicator}}</td>
+        <td >{{Indicator.Significance_of_indicator}}</td>
+        <td >{{Indicator.Plan}}</td>
+        <td >{{Indicator.actual_indicator}}</td>
+        <td >{{Indicator.Degree_of_compliance}}</td>
+        <td ><a href="{% url 'indicator-show-details' Indicator.id %}">Просмотр подробностей</a></td>
     </tr>
     {% endfor %}
 	</tbody>
@@ -55,13 +61,11 @@
 
 {% show_pagination page_obj=page_obj %}
  </div>
-
+ </div>
 </div>
 
-</div>
-</div>
 
 {% endif %}
-
+</div>
 {% endblock %}
 

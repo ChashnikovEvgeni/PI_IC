@@ -3,16 +3,18 @@
 
 {% block change_files %}
 
+<div class = "col-md-10">
+
 <div class="container" align="middle" style="margin-top:6%; " >
 
 <div class="card" style="width: 60rem;" align="left" >
     <div class="card-body">
-    <p class="from-control"><h2>Редактирование файлов показателя {{indicator_title}}</h2></p>
+    <h3 align="middle"><p class="from-control">Редактирование файлов показателя:</p> <p>{{indicator_title}}</p></h3>
      </br>
     <div class="col-12">
 
 <!-- Вывод файлов на экран + модальное окно -->
-<ul class="list-group list-group-flush">
+<ul class="list-group list-group-flush" align="middle">
 {% for file in files %}
  <li class="list-group-item">
     <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#s{{file.id}}">
@@ -62,10 +64,10 @@
 </br>
 <div class="row">
     <div class="col-sm-6" align="right">
-    <button class="btn btn-primary btn-lg" type="submit">Добавить</button>
+    <button class="btn btn-outline-primary" type="submit">Добавить</button>
      </div>
     <div class="col-sm-6">
-    <a type="button" class="btn btn-primary btn-lg"  href="{% url 'indicator-show-details' indicator_id %}" >Вернуться  </a>
+    <a type="button" class="btn btn-outline-primary"  href="{% url 'indicator-show-details' indicator_id %}" >Вернуться  </a>
     </div>
 </div>
 
@@ -74,6 +76,7 @@
 </div>
  </br>
 
+</div>
 </div>
 </div>
 {% endblock %}

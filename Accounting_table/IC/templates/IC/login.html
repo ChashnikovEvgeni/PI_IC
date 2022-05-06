@@ -1,9 +1,14 @@
 {% extends 'IC/base.html' %}
 {% block login %}
+<div class = "col-md-5" style="margin-top:10%;">
 </br>
-<div class="container">
-    <h2>Войдите или <a  href="{% url 'register' %}" title="Зарегистрировать новый аккаунт"> зарегистрируйтесь </a></h2>
-</br>
+<div class="container" align="middle">
+    <h3 align="middle">Войдите или <a  href="{% url 'register' %}" title="Зарегистрировать новый аккаунт"> зарегистрируйтесь</a>,
+    <p>чтобы продолжить</p></h3>
+    <div align="middle" class = "col-md-4" >
+    <hr>
+    </div>
+     <div align="middle" class = "col-md-7" >
 <form method="post">
     {% csrf_token %}
 
@@ -13,8 +18,13 @@
 <p><label class="form-label" for="{{ f.id_for_label }}">{{f.label}}: </label>{{ f }}</p>
 <div class="form-error">{{ f.errors }}</div>
 {% endfor %}
+    <div class="d-grid gap-2">
+    <button type="submit" class="btn btn-primary"  >Войти</button>
+    </div>
 
-    <button type="submit" class="btn btn-primary" >Войти</button>
 </form>
 </div>
+
+</div>
 {% endblock %}
+</div>

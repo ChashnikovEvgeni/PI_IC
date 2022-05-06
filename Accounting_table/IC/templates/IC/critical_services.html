@@ -6,14 +6,16 @@
 
 
 {% block CS_input %}
+<div class = "col-md-10">
 </br>
 <div class="container" align="center">
     <div class="col-12">
 
 
 <div class="table-responsive">
-<table class="table table-bordered table-primary table-striped table-hover" style="border: 10px; margin-top:10%">
-    <thead><tr>
+<table class="table  table-hover" style=" margin-top:10%">
+    <thead><tr class="table-secondary" align="middle">
+        <th><p align="top">#</p></th>
         <th><p align="top">Критически важные сервисы/службы</p></th>
         <th><p align="top">Режим работы</p></th>
         <th><p align="top">Рабочих дней в отчётном периоде</p></th>
@@ -29,7 +31,10 @@
 <form action="{% url url_name form.instance.id %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="form-error">{{ form.non_field_errors }}</div>
-<tr>
+<tr  align="middle">
+    <td>
+        {% get_number page_obj forloop.counter %}
+    </td>
     <td class="col-3">
     {{form.instance.title}}
     </td>
@@ -69,7 +74,7 @@
 
  {% if perms.IC.IsEditor %}
    <td class="col-1"> <div class="d-grid gap-2">
-    <button class="btn btn-outline-primary" type="submit">Сохранить измения</button>
+    <button class="btn btn-outline-secondary" type="submit">Сохранить измения</button>
 </div>
    </td>
    {% else %}
@@ -95,5 +100,5 @@
     {% show_pagination page_obj=page_obj %}
 </div>
  </br>
-
+</div>
 {% endblock %}

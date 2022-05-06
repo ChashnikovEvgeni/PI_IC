@@ -4,26 +4,27 @@
 <nav aria-label="Page navigation example">
     <ul class="pagination">
         <li class="page-item">
-        <a class="page-link" href="?page={{ 1 }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
+        <a class="page-link" style="color:#000000; background-color:#f5f5f5;" href="?page={{ 1 }}" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
         </li>
             {% for p in page_obj.paginator.page_range %}
        {% if page_obj.number == p %}
         <li class="page-item">
-            <a class="nav-link disabled" href="?page={{ p }}">{{ p }}</a>
+            <a class="nav-link disabled" style=" background-color:#f8f8f8;" href="?page={{ p }}">{{ p }}</a>
         </li>
         {% else %}
          <li class="page-item">
-            <a class="page-link " href="?page={{ p }}">{{ p }}</a>
+            <a class="page-link "  style="color:#000000; background-color:#f5f5f5;" href="?page={{ p }}">{{ p }}</a>
         </li>
         {% endif %}
 
         {% endfor %}
         <li class="page-item">
-        <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
+        <a class="page-link"   style="color:#000000; background-color:#f5f5f5;" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
       </a>
         </li>
     </ul>
   </nav>
+
 {% endif %}
 {% endblock %}

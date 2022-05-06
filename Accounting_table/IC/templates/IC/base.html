@@ -11,7 +11,7 @@
     <link type="text/css" href="{% static 'IC/css/s.css' %}" rel="stylesheet" />
     <title>IC</title>
 </head>
-<body style="background-color:#dedddc; ">
+<body style="background-color:#ffffff; ">
 
 
 <!--
@@ -91,59 +91,29 @@
 </nav>
 -->
 
+{% block navbar %}
+{% if request.user.is_authenticated %}
 
-<nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color:#0079c2;" >
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background-color:#ffffff; border-bottom: solid #f5f5f5;" >
   <div class="container-fluid">
-    <a class="navbar-brand" style="color:#ffffff;"><h4  >Учёт показателей эффективности</h4></a>
+      <img src="{% static 'IC/images/logo_horizontal.svg' %}"  style="width:10%; height: 3%;">
+  <!--  <a class="navbar-brand" style="color:#0079c2;"><h4  >Учёт показателей эффективности</h4></a> -->
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll" aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-      {% block main_menu %}
-      {% if request.user.is_authenticated %}
+
+      <a class="nav-link active" aria-current="page" style="color:#0079c2;" href="{% url 'logout' %}"> {{user.username}}
+          <img src="{% static 'IC/images/user.svg' %}" alt="альтернативный текст" style="border-radius: 100px; padding: 5px; border: 3px solid #0079c2;"></a>
+    <!--
     <div class="collapse navbar-collapse" id="navbarScroll">
       <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" style="color:#ffffff;" href = "{% url 'home' %}">Главная</a>
-        </li>
-         {% if perms.IC.IsEditor %}
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:#ffffff;">
-           Добавление объекта
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-            <li><a class="dropdown-item" title="Возможно использовать только если вы администратор"  href="{% url 'add_service' %}">Добавить службу</a></li>
-             <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" title="Возможно использовать только если вы администратор" href="{% url 'add_department' %}">Добавить отдел/группу</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" title="Возможно использовать только если вы администратор"  href="{% url 'add_indicator' %}">Добавить показатель</a></li>
-               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" title="Возможно использовать только если вы администратор"  href="{% url 'add_critical_service' %}" >Добавить критический сервис/службу</a></li>
-          </ul>
-        </li>
-        {% endif %}
-    <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:#ffffff;">
-            Работа с данными
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
-            <li><a class="dropdown-item" title="Ввод данных фактического состояния по каждому из показателей."   href="{% url 'input1' %}">Ввод данных за отчётный период</a></li>
-             <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" title="Просмотр отчётов по каждому из отделов. Вам будет представленны суммарные показатели." href="{% url 'department-report-departments' %}">Отчёт отделов</a></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" title="Расчётная форма, показывающая подробную информацию по каждому показателю и позволяющая перейти к просмотру подробностей по каждому из них." href="{% url 'indicator-settlement-form' %}">Расчётная форма</a></li>
-               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item"  title=""  href="{% url 'CS_input1' %}">Критически важные сервисы/службы</a></li>
-          </ul>
-        </li>
-          <li class="nav-item">
-          <a a class="nav-link active" aria-current="page" style="color:#ffffff;" href="{% url 'print_report' %}" align="left" >Печать отчёта</a>
-           </li>
          <li class="nav-item">
-          <a class="nav-link active" aria-current="page" style="color:#ffffff;" href="{% url 'logout' %}">{{user.username}}</a>
+          <a class="nav-link active" aria-current="page" style="color:#000000;" href="{% url 'logout' %}">{{user.username}}</a>
         </li>
       </ul>
     </div>
-      {% else %}
+    -->
+      <!--
       <div class="collapse navbar-collapse" id="navbarScroll">
           <ul class="navbar-nav me-auto my-2 my-lg-0 navbar-nav-scroll" style="--bs-scroll-height: 100px;">
             <li class="nav-item">
@@ -154,13 +124,76 @@
         </li>
           </ul>
       </div>
-       {% endif %}
-      {% endblock main_menu %}
-  </div>
+     -->
 </nav>
 
+{% endif %}
+
+{% endblock navbar %}
 
 
+<div class = "row"  style=" min-height:100%;">
+{% block main_menu %}
+{% if request.user.is_authenticated %}
+<div class = "col-md-2" style="background-color:#0079c2; min-height:100%;">
+</br>
+</br>
+</br>
+</br>
+
+    <ul class="list-group" style="margin-top:15%">
+
+  <li>
+      <a class="nav-link active" aria-current="page" style="color:#ffffff;" href = "{% url 'home' %}"><img src="{% static 'IC/images/home.svg' %}" style="margin-right: 10%; margin-left: 3%"> Главная</a>
+  </li>
+
+ {% if perms.IC.IsEditor %}
+  <li > <a class="nav-link dropdown-toggle" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:#ffffff;">
+          <img src="{% static 'IC/images/plus.svg' %}" style="margin-right: 10%; margin-left: 3%"> Добавление объекта
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+            <li><a class="dropdown-item" title="Возможно использовать только если вы администратор"  href="{% url 'add_service' %}">Добавить службу</a></li>
+             <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" title="Возможно использовать только если вы администратор" href="{% url 'add_department' %}">Добавить отдел/группу</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" title="Возможно использовать только если вы администратор"  href="{% url 'add_indicator' %}">Добавить показатель</a></li>
+               <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" title="Возможно использовать только если вы администратор"  href="{% url 'add_critical_service' %}" >Добавить критический сервис/службу</a></li>
+          </ul></li>
+  <li >
+      {% endif %}
+      <a class="nav-link dropdown-toggle" id="navbarScrollingDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color:#ffffff;">
+           <img src="{% static 'IC/images/data.svg' %}" style="margin-right: 12%; margin-left: 5%"> Работа с данными
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
+            <li><a class="dropdown-item" title="Ввод данных фактического состояния по каждому из показателей."   href="{% url 'input1' %}">Ввод данных за отчётный период</a></li>
+             <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" title="Просмотр отчётов по каждому из отделов. Вам будет представленны суммарные показатели." href="{% url 'department-report-departments' %}">Отчёт отделов</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" title="Расчётная форма, показывающая подробную информацию по каждому показателю и позволяющая перейти к просмотру подробностей по каждому из них." href="{% url 'indicator-settlement-form' %}">Расчётная форма</a></li>
+               <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item"  title=""  href="{% url 'CS_input1' %}">Критически важные сервисы/службы</a></li>
+          </ul></li>
+     <li>
+        <a  class="nav-link active" aria-current="page" style="color:#ffffff;" href="{% url 'print_report' %}" align="left" >Печать отчёта</a>
+     </li>
+</ul>
+</div>
+    {% else %}
+    <div class = "col-md-7" style="background-color:#0079c2; min-height:100%;">
+
+       <img src="{% static 'IC/images/logo_horizontal.svg' %}" alt="альтернативный текст" style="border-radius: 100px; padding: 5px; border: 3px solid #0079c2;">
+    </div>
+
+    {% endif %}
+
+
+{% endblock main_menu %}
+
+
+
+    {% block index  %}
+{% endblock  %}
 
 
 {% block settlement_form %}
@@ -170,10 +203,6 @@
 {% block report_departments %}
 {% endblock %}
 
-
-
-{% block data_input %}
-{% endblock %}
 
 {% block add_object %}
 {% endblock %}
@@ -201,7 +230,7 @@
 
 {% block CS_input %}
 {% endblock %}
-
+</div>
 <script  type="text/javascript" src="{% static 'IC/js/bootstrap.bundle.min.js' %}" ></script>
 </body>
 </html>
