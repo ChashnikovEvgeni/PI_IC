@@ -5,12 +5,35 @@
 
 <div class = "col-md-10">
 </br>
-<div class="container">
+<div class="container" style=" margin-top:6%">
     <div class = "col-md-11" style="margin-left:5%">
-<div class="table-responsive">
 
-    <p><h5>Служба {{ service.title }}  Итоговые показатели:  приоритет ППРТД:  {{ service.indicator_PPRTD }};  приоритет ПФВИР: {{ service.indicator_PFVIR }} </h5></p>
-<table class="table table-hover" style=" margin-top:10%">
+
+  {% if perms.IC.IsEditor %}
+   <div class="table-responsive">
+   <table class="table table-hover"  style=" margin-top:3%">
+   <thead>
+   <tr class="table-secondary" align="middle">
+       <th> </th> <th> Целевой показатель </th>  <th>Вес суммарный, ППРТД </th>  <th>ППРТД показатель </th>  <th>Вес суммарный, ПФВИР </th> <th>ПФВИР показатель </th> <th> Значение при достижении целевых показателей отделами и группами</th>
+    </tr>
+       <tbody>
+   <tr align="middle">
+   <td>Служба {{ service.title }}</td>
+       <td>{{ service.target_indicator }}</td>
+       <td> {{ service.sum_weight_PPRTD}}</td>
+       <td> {{ service.indicator_PPRTD}}</td>
+       <td> {{ service.sum_weight_PFVIR}}</td>
+       <td> {{ service.indicator_PFVIR}}</td>
+       <td> {{ service.value_when_reached}}</td>
+
+   </tr>
+   </tbody>
+    </table>
+   </div>
+     {% endif  %}
+
+<div class="table-responsive">
+<table class="table table-hover"  style=" margin-top:3%">
     <thead><tr class="table-secondary" align="middle"><th># </th><th>Название отдела/группы</th><th>Показатель</th><th>Вес, приоритета передачи режимно-технологических данных</th><th>Показатель</th> <th>Вес, приоритет функционирование ВИР</th> <th>Показатель</th></tr></thead>
     <tbody>
     {% for department in page_obj %}

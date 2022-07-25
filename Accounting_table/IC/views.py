@@ -26,11 +26,11 @@ from django.contrib.auth.models import User
 from .forms import *
 from .logic import print_settlement_form, print_report_departments, print_report_CS
 from .models import *
-from .permissions import IsOwnerOrStaffOrReadOnly, IsAccess, IsCreator
+from .permissions import IsOwnerOrStaffOrReadOnly, IsAccess, IsCreator, AccessIndicator
 from .serializers import *
 from .utils import *
 
-
+@login_required(login_url='login/')
 def index(request):
     return render(request, 'IC/index.html')
 
@@ -39,7 +39,7 @@ def index(request):
 class ServiceViewSet(ModelViewSet):
     queryset = Service.objects.all()
     serializer_class = ServiceSerializer
-    permission_classes =  (IsAuthenticated, IsAccess)
+    permission_classes =  (IsAccess, )
 
 @api_view(['GET', 'POST'])
 @permission_classes([IsCreator])
@@ -71,10 +71,13 @@ def forms_service(request, service_id=None):
 
 # Набор представлений отдела/группы
 
+
+
 class DepartmentViewSet(ModelViewSet):
     queryset = Department.objects.all()
     serializer_class = DepartmentSerializer
-    permission_classes = (IsAuthenticated, IsAccess)
+    permission_classes = (IsAccess, )
+
 
     @action(detail=False, methods=['get'], name='report_departments')
     def report_departments(self, request, *args, **kwargs):
@@ -87,8 +90,14 @@ class DepartmentViewSet(ModelViewSet):
         return render(request, 'IC/report_departments.html',
                       {'page_obj': page_obj, 'list': self.queryset, 'service': service})
 
+    def get_deps(self):
+        access_departments = self.request.user.profile.access.all()
+        return access_departments
+
+
 # формы добвления/изменения отдела/группы
 @api_view(['GET', 'POST'])
+
 @permission_classes([IsCreator])
 def forms_department(request, department_id=None):
     if department_id is None:
@@ -145,6 +154,7 @@ class IndicatorViewSet(ModelViewSet):
     # представление для ввода данных
 
 @api_view(['GET', 'POST'])
+
 #@permission_classes([IsCreator])
 def data_input(request, indicator_id=None):
         page_obj = get_page_obj(Indicator.objects.filter(department__in=request.user.profile.access.all()), 6, request)
@@ -180,6 +190,7 @@ def data_input(request, indicator_id=None):
 # представление для удаления/добавления файлов подтверждения значения показателя
 #@permission_required([IsCreator], raise_exception=True)
 @api_view(['GET', 'POST'])
+
 @permission_classes([IsCreator])
 def change_files(request, indicator_id=None ):
     indicator = Indicator.objects.get(pk=indicator_id)
@@ -211,6 +222,7 @@ def change_files(request, indicator_id=None ):
 # формы добвления/изменения показателя
 #@permission_required([IsCreator], raise_exception=True)
 @api_view(['GET', 'POST'])
+
 @permission_classes([IsCreator])
 def forms_indicator(request, indicator_id=None):
     if indicator_id is None:
@@ -251,11 +263,12 @@ def forms_indicator(request, indicator_id=None):
 
 
 # набор представлений для файлов подтверждения показателя
+
 class Indicators_fileViewSet(ModelViewSet):
     queryset = Indicators_file.objects.select_related(
         'indicator')
     serializer_class = Indicators_fileSerializer
-    permission_classes =(IsAuthenticated)
+    permission_classes =()
 
 #@permission_required([IsCreator], raise_exception=True)
 @api_view(['GET', 'DELETE'])
