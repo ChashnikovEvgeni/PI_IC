@@ -25,6 +25,12 @@ class IsAccess(permissions.BasePermission):
       return False
 
 
+class AccessIndicator(permissions.BasePermission):
+    def has_object_permission(self, request, view, obj):
+        if obj.department in  request.user.profile.access.all():
+            return True
+        return False
+
 
 class IsCreator(permissions.BasePermission):
   message = 'Отсутствуют права доступа'

@@ -113,14 +113,14 @@ class MyStorage(FileSystemStorage):
             dir_name, file_name = os.path.split(name)
             file_root, file_ext = os.path.splitext(file_name)
             version = file_root[-8:-2]
-           # print(file_root[-1:])
+
 
             if (version == 'Версия'):
                my_chars = int(file_root[-1:]) + 1
                file_root = file_root[:-1]
                name = os.path.join(dir_name, '{}{}{}'.format(file_root, my_chars, file_ext))
             else:
-                my_chars = 'Версия_2'  # The characters you want to append
+                my_chars = 'Версия_2'
                 name = os.path.join(dir_name, '{}_{}{}'.format(file_root, my_chars, file_ext))
         return name
 
