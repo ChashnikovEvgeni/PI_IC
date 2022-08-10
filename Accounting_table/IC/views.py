@@ -14,7 +14,7 @@ from openpyxl.styles import PatternFill, Border, Side, Alignment
 from openpyxl.utils import get_column_letter
 from requests import Response
 from rest_framework import renderers, permissions, status
-from rest_framework.decorators import action, api_view, permission_classes
+from rest_framework.decorators import action, api_view, permission_classes, parser_classes
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework.permissions import IsAuthenticated
@@ -42,6 +42,7 @@ class ServiceViewSet(ModelViewSet):
     permission_classes =  (IsAccess, )
 
 @api_view(['GET', 'POST'])
+@parser_classes([MultiPartParser])
 @permission_classes([IsCreator])
 def forms_service(request, service_id=None):
     if service_id is None:
@@ -97,9 +98,10 @@ class DepartmentViewSet(ModelViewSet):
 
 # формы добвления/изменения отдела/группы
 @api_view(['GET', 'POST'])
-
+@parser_classes([MultiPartParser])
 @permission_classes([IsCreator])
 def forms_department(request, department_id=None):
+
     if department_id is None:
         department = None
         template = 'IC/add_object.html'
@@ -130,7 +132,7 @@ def forms_department(request, department_id=None):
 class IndicatorViewSet(ModelViewSet):
     queryset = Indicator.objects.select_related(
         'department')
-    permission_classes = (IsAuthenticated,)
+    #permission_classes = (IsAuthenticated,)
     serializer_class = IndicatorSerializer
 
 
@@ -154,8 +156,8 @@ class IndicatorViewSet(ModelViewSet):
     # представление для ввода данных
 
 @api_view(['GET', 'POST'])
-
-#@permission_classes([IsCreator])
+@parser_classes([MultiPartParser])
+@permission_classes([IsCreator])
 def data_input(request, indicator_id=None):
         page_obj = get_page_obj(Indicator.objects.filter(department__in=request.user.profile.access.all()), 6, request)
         context = { 'url_name': 'input2'}
@@ -190,7 +192,7 @@ def data_input(request, indicator_id=None):
 # представление для удаления/добавления файлов подтверждения значения показателя
 #@permission_required([IsCreator], raise_exception=True)
 @api_view(['GET', 'POST'])
-
+@parser_classes([MultiPartParser])
 @permission_classes([IsCreator])
 def change_files(request, indicator_id=None ):
     indicator = Indicator.objects.get(pk=indicator_id)
@@ -222,7 +224,7 @@ def change_files(request, indicator_id=None ):
 # формы добвления/изменения показателя
 #@permission_required([IsCreator], raise_exception=True)
 @api_view(['GET', 'POST'])
-
+@parser_classes([MultiPartParser])
 @permission_classes([IsCreator])
 def forms_indicator(request, indicator_id=None):
     if indicator_id is None:
@@ -272,6 +274,7 @@ class Indicators_fileViewSet(ModelViewSet):
 
 #@permission_required([IsCreator], raise_exception=True)
 @api_view(['GET', 'DELETE'])
+@parser_classes([MultiPartParser])
 @permission_classes([IsCreator])
 def delete_file(request, id):
     try:
